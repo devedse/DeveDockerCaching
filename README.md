@@ -1,2 +1,4 @@
 # DeveDockerCaching
-DeveDockerCaching is an Azure DevOps extension to automatically cache docker layers.
+DeveDockerCaching is an Azure DevOps extension to automatically cache docker layers during build.
+
+![](DeveDockerCaching.png =400x)
