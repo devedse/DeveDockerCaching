@@ -14,6 +14,7 @@ matrix:
       dist: bionic # Ubuntu 18.04
 
 script:
+  - cd src
   - npm install
   - tfx extension create
 
