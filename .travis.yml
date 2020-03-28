@@ -21,6 +21,7 @@ script:
   - python3 script/updateversion.py
   - cd src
   - npm install
+  - tsc
   - tfx extension create
 
 notifications:

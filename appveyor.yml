@@ -18,6 +18,7 @@ build_script:
   - python script/updateversion.py
   - cd src
   - npm install
+  - tsc
   - tfx extension create
 
 after_test:
