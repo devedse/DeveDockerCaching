@@ -5,8 +5,9 @@ configuration: Release
 
 # environment:
 
-# before_build:
-#   - choco install 7zip
+before_build:
+  - npm install -g tfx-cli
+  # - choco install 7zip
 
 build_script:
   - cd src

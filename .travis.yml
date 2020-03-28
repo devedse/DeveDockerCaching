@@ -13,6 +13,9 @@ matrix:
       os: linux
       dist: bionic # Ubuntu 18.04
 
+install:
+  - npm install -g tfx-cli
+
 script:
   - cd src
   - npm install
