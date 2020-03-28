@@ -26,17 +26,19 @@ loadedFile = open(vssExtensionsFilePath, "w")
 json.dump(json_object, loadedFile)
 loadedFile.close()
 
-taskJsonFilePath = "src/buildAndReleaseTask/task.json"
+paths = Path('src').glob('**/task.json')
 
-print(f"Updating Patch Version to {patchVersion} in {taskJsonFilePath}")
+for taskJsonFilePath in paths:
 
-loadedFile = open(taskJsonFilePath, "r")
-json_object = json.load(loadedFile)
-loadedFile.close()
+    print(f"Updating Patch Version to {patchVersion} in {taskJsonFilePath}")
 
-json_object["version"]["Patch"] = patchVersion
-print(json_object)
+    loadedFile = open(taskJsonFilePath, "r")
+    json_object = json.load(loadedFile)
+    loadedFile.close()
 
-loadedFile = open(taskJsonFilePath, "w")
-json.dump(json_object, loadedFile)
-loadedFile.close()
+    json_object["version"]["Patch"] = patchVersion
+    print(json_object)
+
+    loadedFile = open(taskJsonFilePath, "w")
+    json.dump(json_object, loadedFile)
+    loadedFile.close()
