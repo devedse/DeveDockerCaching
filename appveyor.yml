@@ -5,8 +5,8 @@ configuration: Release
 
 # environment:
 
-before_build:
-  - choco install 7zip
+# before_build:
+#   - choco install 7zip
 
 build_script:
   - cd src
