@@ -1,9 +1,9 @@
 {
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
-    "id": "44343834-7e52-4853-9517-5116ca405ad6",
-    "name": "DeveDockerCaching-DockerPullCache",
-    "friendlyName": "Deve Docker Caching - Docker Pull Cache",
-    "description": "Task to use in combination with Docker Build to pull cached layers",
+    "id": "4214ac99-1457-4251-95de-d5f08bc298ea",
+    "name": "DeveDockerCaching-DockerPushCache",
+    "friendlyName": "Deve Docker Caching - Docker Push Cache",
+    "description": "Task to use in combination with Docker Build to Push cached layers",
     "helpMarkDown": "",
     "category": "Utility",
     "author": "Devedse",
