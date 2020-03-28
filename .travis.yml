@@ -17,6 +17,7 @@ install:
   - npm install -g tfx-cli
 
 script:
+  - python script/updateversion.py
   - cd src
   - npm install
   - tfx extension create
