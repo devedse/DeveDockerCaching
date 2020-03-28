@@ -3,9 +3,9 @@ os: Visual Studio 2019
 skip_tags: true
 configuration: Release
 
-# environment:
-
-stack: python 3.8
+environment:
+  devopsmarketplacePAT:
+    secure: RSBRSDY8YUA95EpSdZjtbISWyWemugzG7lpwObh3S48mSOpZm0gAw1RB1f5s0KHbo4hnhZkTgYhYY1IHcsNGIg==
 
 before_build:
   - SET PATH="C:\Python38";%path%
@@ -20,7 +20,7 @@ build_script:
   - tfx extension create
 
 after_test:
-  - cmd: echo Test test packing ...
+  - tfx extension publish --share-with avavedse -t {devopsmarketplacePAT}
 
 artifacts:
 - path: 'src/*.vsix'
