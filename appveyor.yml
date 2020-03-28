@@ -8,6 +8,7 @@ configuration: Release
 stack: python 3.8
 
 before_build:
+  - SET PATH="C:\Python38";%path%
   - npm install -g tfx-cli
   # - choco install 7zip
 
