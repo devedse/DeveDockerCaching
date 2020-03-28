@@ -21,6 +21,25 @@
             "defaultValue": "",
             "required": true,
             "helpMarkDown": "A sample string"
+        },
+        {
+            "name": "containerRegistry",
+            "type": "connectedService:dockerregistry",
+            "label": "Container registry",
+            "groupName": "containerRepository",
+            "helpMarkDown": "Select a Docker registry service connection. Required for commands that need to authenticate with a registry."
+        },
+        {
+            "name": "repository",
+            "label": "Container repository",
+            "type": "string",
+            "helpMarkDown": "Name of the repository.",
+            "defaultValue": "",
+            "visibleRule": "command != login && command != logout",
+            "groupName": "containerRepository",
+            "properties": {
+                "EditableOptions": "True"
+            }
         }
     ],
     "execution": {
