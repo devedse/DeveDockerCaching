@@ -20,11 +20,11 @@ script:
   - python3 --version
   - python3 script/updateversion.py
   - cd src
-  - cd DockerPullCache
+  - cd DockerTask
   - npm install
   - tsc
   - cd ..
-  - cd DockerPushCache
+  - cd DockerComposeTask
   - npm install
   - tsc
   - cd ..
