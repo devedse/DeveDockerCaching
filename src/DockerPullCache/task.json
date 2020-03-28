@@ -35,7 +35,6 @@
             "type": "string",
             "helpMarkDown": "Name of the repository.",
             "defaultValue": "",
-            "visibleRule": "command != login && command != logout",
             "groupName": "containerRepository",
             "properties": {
                 "EditableOptions": "True"
