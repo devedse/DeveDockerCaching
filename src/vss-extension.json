@@ -6,37 +6,32 @@
     "name": "Deve Docker Caching",
     "description": "An Azure DevOps extension to automatically cache docker layers during build.",
     "public": false,
-    "categories": ["Azure Repos"],
+    "categories": [
+        "Azure Pipelines"
+    ],
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
         }
-    ],
+    ],   
     "icons": {
         "default": "DeveDockerCaching.png"
     },
     "contributions": [
         {
-            "id": "my-hub",
-            "type": "ms.vss-web.hub",
+            "id": "custom-build-release-task",
+            "type": "ms.vss-distributed-task.task",
             "targets": [
-                "ms.vss-code-web.code-hub-group"
+                "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "My Hub",
-                "uri": "my-hub.html"
+                "name": "buildAndReleaseTask"
             }
         }
     ],
     "files": [
         {
-            "path": "my-hub.html",
-            "addressable": true
-        },
-        {
-            "path": "node_modules/vss-web-extension-sdk/lib",
-            "addressable": true,
-            "packagePath": "lib"
+            "path": "buildAndReleaseTask"
         }
     ]
 }

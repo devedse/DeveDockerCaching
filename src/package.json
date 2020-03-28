@@ -10,6 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "azure-pipelines-task-lib": "^2.9.3",
     "vss-web-extension-sdk": "^5.141.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.9.5",
+    "@types/q": "^1.5.2"
   }
 }

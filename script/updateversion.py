@@ -3,23 +3,40 @@ from os import environ
 import json
 
 version = '1.0.0'
+patchVersion = '0'
 
 if environ.get('TRAVIS') is not None:
-    version = f"1.0.{os.environ['TRAVIS_BUILD_NUMBER']}"
+    patchVersion = os.environ['TRAVIS_BUILD_NUMBER']
 if environ.get('APPVEYOR') is not None:
-    version = f"1.0.{os.environ['APPVEYOR_BUILD_NUMBER']}"
+    patchVersion = os.environ['APPVEYOR_BUILD_NUMBER']
 
-print(f"Updating version to {version}")
-
+version = f"1.0.{patchVersion}"
 vssExtensionsFilePath = "src/vss-extension.json"
 
-vssExtensionsFile = open(vssExtensionsFilePath, "r")
-json_object = json.load(vssExtensionsFile)
-vssExtensionsFile.close()
-print(json_object)
+print(f"Updating version to {version} in {vssExtensionsFilePath}")
+
+loadedFile = open(vssExtensionsFilePath, "r")
+json_object = json.load(loadedFile)
+loadedFile.close()
 
 json_object["version"] = version
+print(json_object)
 
-vssExtensionsFile = open(vssExtensionsFilePath, "w")
-json.dump(json_object, vssExtensionsFile)
-vssExtensionsFile.close()
+loadedFile = open(vssExtensionsFilePath, "w")
+json.dump(json_object, loadedFile)
+loadedFile.close()
+
+taskJsonFilePath = "src/buildAndReleaseTask/task.json"
+
+print(f"Updating Patch Version to {patchVersion} in {taskJsonFilePath}")
+
+loadedFile = open(taskJsonFilePath, "r")
+json_object = json.load(loadedFile)
+loadedFile.close()
+
+json_object["version"]["Patch"] = patchVersion
+print(json_object)
+
+loadedFile = open(taskJsonFilePath, "w")
+json.dump(json_object, loadedFile)
+loadedFile.close()

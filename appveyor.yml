@@ -10,6 +10,7 @@ environment:
 before_build:
   - SET PATH="C:\Python38";%path%
   - npm install -g tfx-cli
+  - npm install -g typescript
   # - choco install 7zip
 
 build_script:
