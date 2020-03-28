@@ -3,7 +3,7 @@ os: Visual Studio 2019
 skip_tags: true
 configuration: Release
 
-environment:
+# environment:
 
 before_build:
   - choco install 7zip
