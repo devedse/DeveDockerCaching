@@ -1,0 +1,26 @@
+version: 1.0.{build}
+os: Visual Studio 2019
+skip_tags: true
+configuration: Release
+
+environment:
+
+before_build:
+  - choco install 7zip
+
+build_script:
+  - npm install
+  - tfx extension create
+
+after_test:
+  - cmd: echo Test test packing ...
+
+artifacts:
+- path: '*.vsix'
+  name: vsix
+
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: do7S++r1rE5E3IZujCoMONsWYJNF7eoRoPyJbxSD851I850OlEq0gsHH/Tji7o00
+  artifact: vsix

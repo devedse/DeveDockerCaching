@@ -1,0 +1,21 @@
+# Verifying yaml files: http://www.yamllint.com/ or https://github.com/adrienverge/yamllint
+
+branches:
+  only:
+  - master
+
+services:
+  - docker
+
+matrix:
+  include:
+    - mono: none
+      os: linux
+      dist: bionic # Ubuntu 18.04
+
+script:
+  - npm install
+  - tfx extension create
+
+notifications:
+  email: false
