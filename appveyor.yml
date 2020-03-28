@@ -10,7 +10,8 @@ before_build:
   # - choco install 7zip
 
 build_script:
-  - python3 script/updateversion.py
+  - python --version
+  - python script/updateversion.py
   - cd src
   - npm install
   - tfx extension create

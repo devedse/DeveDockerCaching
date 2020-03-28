@@ -17,6 +17,8 @@ install:
   - npm install -g tfx-cli
 
 script:
+  - python --version
+  - python3 --version
   - python3 script/updateversion.py
   - cd src
   - npm install
