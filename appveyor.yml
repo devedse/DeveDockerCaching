@@ -17,6 +17,7 @@ build_script:
   - python --version
   - python script/updateversion.py
   - cd src
+  - cd buildAndReleaseTask
   - npm install
   - tsc
   - tfx extension create
