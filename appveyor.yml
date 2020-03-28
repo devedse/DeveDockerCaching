@@ -5,6 +5,8 @@ configuration: Release
 
 # environment:
 
+stack: python 3.8
+
 before_build:
   - npm install -g tfx-cli
   # - choco install 7zip

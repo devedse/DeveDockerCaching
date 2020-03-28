@@ -1,6 +1,4 @@
 # Verifying yaml files: http://www.yamllint.com/ or https://github.com/adrienverge/yamllint
-stack: python 3.8
-
 branches:
   only:
   - master
@@ -15,11 +13,9 @@ matrix:
       dist: bionic # Ubuntu 18.04
 
 install:
-  - SET PATH="C:\Python38";%path%
   - npm install -g tfx-cli
 
 script:
-  - python --version
   - python3 --version
   - python3 script/updateversion.py
   - cd src
