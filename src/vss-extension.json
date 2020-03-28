@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "DeveDockerCaching",
-    "publisher": "DevedseAutoDeploy",
+    "publisher": "Devedse",
     "version": "1.0.0",
     "name": "Deve Docker Caching",
     "description": "An Azure DevOps extension to automatically cache docker layers during build.",
