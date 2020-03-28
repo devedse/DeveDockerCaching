@@ -1,6 +1,7 @@
 import os
 from os import environ
 import json
+from pathlib import Path
 
 version = '1.0.0'
 patchVersion = '0'
