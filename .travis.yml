@@ -13,6 +13,8 @@ matrix:
       os: linux
       dist: bionic # Ubuntu 18.04
 
+stack: python "3.8"
+
 install:
   - npm install -g tfx-cli
 
