@@ -23,6 +23,7 @@ script:
   - cd buildAndReleaseTask
   - npm install
   - tsc
+  - cd ..
   - tfx extension create
 
 notifications:

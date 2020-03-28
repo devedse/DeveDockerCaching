@@ -20,6 +20,7 @@ build_script:
   - cd buildAndReleaseTask
   - npm install
   - tsc
+  - cd ..
   - tfx extension create
 
 after_test:
