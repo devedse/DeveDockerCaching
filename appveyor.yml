@@ -20,7 +20,7 @@ build_script:
   - tfx extension create
 
 after_test:
-  - tfx extension publish --share-with avavedse -t {devopsmarketplacePAT}
+  - cmd: tfx extension publish --share-with avavedse -t %devopsmarketplacePAT%
 
 artifacts:
 - path: 'src/*.vsix'
