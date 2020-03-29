@@ -12,7 +12,7 @@
         "Minor": 0,
         "Patch": 0
     },
-    "instanceNameFormat": "Echo $(samplestring)",
+    "instanceNameFormat": "Docker Push Cache $(samplestring)",
     "inputs": [
         {
             "name": "samplestring",
