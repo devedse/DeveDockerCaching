@@ -21,6 +21,14 @@
             "defaultValue": "",
             "required": true,
             "helpMarkDown": "A sample string"
+        },        
+        {
+            "name": "anotherString",
+            "type": "string",
+            "label": "Another String",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "A second sample string"
         }
     ],
     "execution": {

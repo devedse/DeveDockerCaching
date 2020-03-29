@@ -21,7 +21,8 @@
             "defaultValue": "",
             "required": true,
             "helpMarkDown": "A sample string"
-        },        {
+        },
+        {
             "name": "anotherString",
             "type": "string",
             "label": "Another String",
