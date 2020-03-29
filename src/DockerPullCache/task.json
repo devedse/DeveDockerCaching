@@ -18,6 +18,11 @@
             "name": "containerRepository",
             "displayName": "Container Repository",
             "isExpanded": true
+        },
+        {
+            "name": "cachingConfiguration",
+            "displayName": "Docker Caching Configuration",
+            "isExpanded": true
         }
     ],
     "inputs": [
@@ -48,13 +53,39 @@
         {	
             "name": "repository",	
             "label": "Container repository",	
-            "type": "string",	
+            "type": "string",
+            "required": true,
             "helpMarkDown": "Name of the repository.",	
             "defaultValue": "", 	
             "groupName": "containerRepository",
             "properties": {	
                 "EditableOptions": "True"	
             }
+        },
+        {
+            "name": "Dockerfile",
+            "type": "filePath",
+            "label": "Dockerfile",
+            "defaultValue": "**/Dockerfile",
+            "required": true,
+            "groupName": "cachingConfiguration",
+            "helpMarkDown": "Path to the Dockerfile."
+        },
+        {
+            "name": "buildContext",
+            "type": "filePath",
+            "label": "Build context",
+            "defaultValue": "**",
+            "groupName": "cachingConfiguration",
+            "helpMarkDown": "Path to the build context. Pass ** to specify the directory that contains the Dockerfile."
+        },
+        {
+            "name": "cacheImagePostfix",
+            "type": "string",
+            "label": "Cache Image Postfix",
+            "defaultValue": "-Staging",
+            "groupName": "cachingConfiguration",
+            "helpMarkDown": "The postfix to append to the cached docker image names. E.g. DeveDocker-Staging where Staging is the PostFix"
         }
     ],
     "execution": {

@@ -83,6 +83,24 @@ export function push(connection: ContainerConnection, image: string, commandArgu
     });
 }
 
+export function pull(connection: ContainerConnection, image: string, commandArguments: string, onCommandOut: (image: any, output: any) => any): any {
+    var command = connection.createCommand();
+    command.arg("pull");
+    command.arg(image);
+    command.line(commandArguments);
+
+    // setup variable to store the command output
+    let output = "";
+    command.on("stdout", data => {
+        output += data;
+    });
+
+    return connection.execCommand(command).then(() => {
+        // Return the std output of the command by calling the delegate
+        onCommandOut(image, output + "\n");
+    });
+}
+
 export function getCommandArguments(args: string): string {
     return args ? args.replace(/\n/g, " ") : "";
 }
