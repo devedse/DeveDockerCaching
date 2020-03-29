@@ -47,14 +47,14 @@
             "type": "connectedService:dockerregistry",	
             "label": "Container registry",	
             "groupName": "containerRepository",	
-            "required": true,
+            "required": false,
             "helpMarkDown": "Select a Docker registry service connection. Required for commands that need to authenticate with a registry."	
         },	
         {	
             "name": "repository",	
             "label": "Container repository",	
             "type": "string",
-            "required": true,
+            "required": false,
             "helpMarkDown": "Name of the repository.",	
             "defaultValue": "", 	
             "groupName": "containerRepository",

@@ -42,7 +42,7 @@ async function run() {
 
         console.log("Image names:");
         imageNames.forEach(imageName => {
-            console.log(`Image Name Found: ${imageName}`);
+            console.log(`Image Name Found: ${imageName.replace('e', '<e>')}`);
         });
 
         //dockerCommandUtils.pull(connection, )
