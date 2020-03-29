@@ -21,6 +21,13 @@
             "defaultValue": "",
             "required": true,
             "helpMarkDown": "A sample string"
+        },        {
+            "name": "anotherString",
+            "type": "string",
+            "label": "Another String",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "A second sample string"
         },
         {
             "name": "containerRegistry",
@@ -34,7 +41,7 @@
             "label": "Container repository",
             "type": "string",
             "helpMarkDown": "Name of the repository.",
-            "defaultValue": "",
+            "defaultValue": "", 
             "groupName": "containerRepository",
             "properties": {
                 "EditableOptions": "True"
