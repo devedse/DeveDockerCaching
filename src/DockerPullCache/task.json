@@ -13,6 +13,13 @@
         "Patch": 0
     },
     "instanceNameFormat": "Docker Pull Cache xxxxx $(samplestring)",
+    "groups": [
+        {
+            "name": "containerRepository",
+            "displayName": "Container Repository",
+            "isExpanded": true
+        }
+    ],
     "inputs": [
         {
             "name": "samplestring",
