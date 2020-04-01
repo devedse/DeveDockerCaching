@@ -45,7 +45,8 @@
             "properties": {	
                 "EditableOptions": "True"	
             }
-        },        {
+        },
+        {
             "name": "action",
             "type": "pickList",
             "label": "Cache Action",
@@ -87,6 +88,16 @@
             "defaultValue": "-Staging",
             "groupName": "cachingConfiguration",
             "helpMarkDown": "The postfix to append to the cached docker image names. E.g. DeveDocker-Staging where Staging is the PostFix"
+        },
+        {
+            "name": "dockerBuildOutput",
+            "type": "string",
+            "label": "Docker build output",
+            "defaultValue": "$(dockerBuildCommand.DockerOutput)",
+            "required": true,
+            "visibleRule": "action = dockerPushCache || action = dockerComposePushCache",
+            "groupName": "cachingConfiguration",
+            "helpMarkDown": "The output variable value from the Docker build output. This can be found in the 'Output Variables' for the Docker build command."
         }
     ],
     "execution": {

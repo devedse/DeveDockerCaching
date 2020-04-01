@@ -12,8 +12,16 @@ import * as fileUtils from "./docker-common-v2/fileutils";
 
 export function run(connection: ContainerConnection, outputUpdate: (data: string) => any, isBuildAndPushCommand?: boolean): any {
 
+    console.log("Starting Docker Cache Push...");
+
     // find dockerfile path
     let dockerfilepath = tl.getInput("Dockerfile", true)!;
     let dockerFile = fileUtils.findDockerFile(dockerfilepath);
 
+    console.log(`Docker file path: ${dockerfilepath}`);
+    console.log(`Docker file: ${dockerFile}`);
+
+    let dockerBuildOutput = tl.getInput("dockerBuildOutput", true)!;
+    console.log("Docker build output:");
+    console.log(dockerBuildOutput);
 }
