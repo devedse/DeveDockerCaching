@@ -19,32 +19,19 @@
     },
     "contributions": [
         {
-            "id": "DockerPullCache-task",
+            "id": "DockerCache-task",
             "type": "ms.vss-distributed-task.task",
             "targets": [
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "DockerPullCache"
-            }
-        },
-        {
-            "id": "DockerPushCache-task",
-            "type": "ms.vss-distributed-task.task",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "name": "DockerPushCache"
+                "name": "DockerCache"
             }
         }
     ],
     "files": [
         {
-            "path": "DockerPullCache"
-        },
-        {
-            "path": "DockerPushCache"
+            "path": "DockerCache"
         }
     ]
 }

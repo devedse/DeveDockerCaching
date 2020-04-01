@@ -1,9 +1,9 @@
 {
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
-    "id": "a7d995cb-bf5b-4ff4-b857-1f0bc5d7df19",
-    "name": "DeveDockerCaching-DockerPullCache",
-    "friendlyName": "Deve Docker Caching - Docker Pull Cache",
-    "description": "Task to use in combination with Docker to pull cached layers",
+    "id": "c08998b8-8843-4dff-ab54-c262868dd590",
+    "name": "DeveDockerCaching",
+    "friendlyName": "Deve Docker Caching",
+    "description": "Task to use in combination with Docker to pull/push cached layers",
     "helpMarkDown": "",
     "category": "Utility",
     "author": "Devedse",
@@ -12,7 +12,7 @@
         "Minor": 0,
         "Patch": 0
     },
-    "instanceNameFormat": "Docker Pull Cache xxxxx $(samplestring)",
+    "instanceNameFormat": "Docker Cache $(samplestring)",
     "groups": [
         {
             "name": "containerRepository",
@@ -27,20 +27,22 @@
     ],
     "inputs": [
         {
-            "name": "samplestring",
-            "type": "string",
-            "label": "Sample String",
-            "defaultValue": "",
+            "name": "action",
+            "type": "pickList",
+            "label": "Cache Action",
+            "defaultValue": "dockerPullCache",
             "required": true,
-            "helpMarkDown": "A sample string"
-        },
-        {
-            "name": "anotherString",
-            "type": "string",
-            "label": "Another String",
-            "defaultValue": "",
-            "required": true,
-            "helpMarkDown": "A second sample string"
+            "options": {
+                "dockerPullCache": "dockerPullCache",
+                "dockerPushCache": "dockerPushCache",
+                "dockerComposePullCache": "dockerComposePullCache",
+                "dockerComposePushCache": "dockerComposePushCache"
+            },
+            "properties": {
+                "EditableOptions": "False"
+            },
+            "groupName": "commands",
+            "helpMarkDown": "Select action."
         },	
         {	
             "name": "containerRegistry",	
