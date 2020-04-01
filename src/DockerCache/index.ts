@@ -11,11 +11,14 @@ import * as dockerCommandUtils from "./docker-common-v2/dockercommandutils";
 
 async function run() {
     try {
+        let endpointId = tl.getInput("containerRegistry");
+        let registryAuthenticationToken: RegistryAuthenticationToken = getDockerRegistryEndpointAuthenticationToken(endpointId);
+
         let command = tl.getInput("action", true)!;
 
         // Connect to any specified container registry
         let connection = new ContainerConnection();
-        connection.open(null, registryAuthenticationToken, true, isLogout);
+        connection.open(null!, registryAuthenticationToken, true, false);
         
         var dockerCommandMap: { [id: string] : string; } = {
             "dockerPullCache": "./dockerPullCache",
