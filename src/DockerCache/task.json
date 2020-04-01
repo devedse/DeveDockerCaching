@@ -12,7 +12,7 @@
         "Minor": 0,
         "Patch": 0
     },
-    "instanceNameFormat": "Docker Cache $(samplestring)",
+    "instanceNameFormat": "Docker Cache - $(action)",
     "groups": [
         {
             "name": "containerRepository",
