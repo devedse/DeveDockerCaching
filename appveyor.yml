@@ -17,11 +17,7 @@ build_script:
   - python --version
   - python script/updateversion.py
   - cd src
-  - cd DockerPullCache
-  - npm install
-  - tsc
-  - cd ..
-  - cd DockerPushCache
+  - cd DockerCache
   - npm install
   - tsc
   - cd ..
