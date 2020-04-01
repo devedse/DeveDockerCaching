@@ -33,7 +33,10 @@ async function run() {
         }
         
 
-
+        let resultPaths = "";
+        await commandImplementation.run(connection, (pathToResult: string) => {
+            resultPaths += pathToResult;    
+        })
         
 
         //dockerCommandUtils.pull(connection, )
