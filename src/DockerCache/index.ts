@@ -27,11 +27,7 @@ async function run() {
             "dockerComposePushCache": "./dockerComposePushCache",
         };
         
-        let commandImplementation = require("./dockercommand");
-        if (command in dockerCommandMap) {
-            commandImplementation = require(dockerCommandMap[command]);
-        }
-        
+        let commandImplementation = require(dockerCommandMap[command]);
 
         let resultPaths = "";
         await commandImplementation.run(connection, (pathToResult: string) => {
