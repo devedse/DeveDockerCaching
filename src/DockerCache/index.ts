@@ -12,7 +12,7 @@ import * as dockerCommandUtils from "./docker-common-v2/dockercommandutils";
 async function run() {
     try {
         let endpointId = tl.getInput("containerRegistry");
-        let registryAuthenticationToken: RegistryAuthenticationToken = getDockerRegistryEndpointAuthenticationToken(endpointId);
+        let registryAuthenticationToken: RegistryAuthenticationToken = getDockerRegistryEndpointAuthenticationToken(endpointId!);
 
         let command = tl.getInput("action", true)!;
 
