@@ -9,6 +9,7 @@ import { getDockerRegistryEndpointAuthenticationToken } from "./docker-common-v2
 import * as dockerCommandUtils from "./docker-common-v2/dockercommandutils";
 import * as pipelineUtils from "./docker-common-v2/pipelineutils";
 import * as fileUtils from "./docker-common-v2/fileutils";
+import * as helpers from "./helpers";
 
 export function run(connection: ContainerConnection, outputUpdate: (data: string) => any, isBuildAndPushCommand?: boolean): any {
 
@@ -25,24 +26,13 @@ export function run(connection: ContainerConnection, outputUpdate: (data: string
     console.log("Docker build output:");
     console.log(dockerBuildOutput);
 
-    let foundPath = findPath(dockerBuildOutput, "build");
+    let foundPath = helpers.findDockerOutputFilePath(dockerBuildOutput, "build");
     console.log(`Found path: ${foundPath}`);
-}
 
+    if (helpers.stringNullOrEmpty(foundPath)) {
+        throw new Error(`Could not find docker output file path in this string: ${dockerBuildOutput}`);
+    }
+    let fileData = fs.readFileSync(foundPath!, 'utf8');
 
-function findPath(dockerBuildOutput: string, thingToFind: string): string | undefined {
-    var paths = dockerBuildOutput.split(/\r?\n/);
-
-    let indexOfLast: number = -1;
-    let foundPath: string | undefined = undefined;
-
-    paths.forEach(str => {
-        var i = str.indexOf(thingToFind);
-        if (i > indexOfLast) {
-            foundPath = str;
-            indexOfLast = i;
-        }
-    });
-
-    return foundPath;
+    console.log(`Docker file data:\n${fileData}`);
 }
