@@ -15,6 +15,7 @@ matrix:
 install:
   - npm install -g tfx-cli
   - npm install -g typescript
+  - npm install -g mocha
 
 script:
   - python3 --version
