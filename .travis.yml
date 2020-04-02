@@ -23,6 +23,7 @@ script:
   - cd DockerCache
   - npm install
   - tsc
+  - mocha tests/_suite.js
   - cd ..
   - tfx extension create
 
