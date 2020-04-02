@@ -30,7 +30,7 @@ export function run(connection: ContainerConnection, outputUpdate: (data: string
     console.log(`Found path: ${foundPath}`);
 
     if (helpers.stringNullOrEmpty(foundPath)) {
-        throw new Error(`Could not find docker output file path in this string: ${dockerBuildOutput}`);
+        throw new Error(`Could not find docker output file path in this string:\n${dockerBuildOutput}`);
     }
     let fileData = fs.readFileSync(foundPath!, 'utf8');
 
