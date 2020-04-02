@@ -24,4 +24,25 @@ export function run(connection: ContainerConnection, outputUpdate: (data: string
     let dockerBuildOutput = tl.getInput("dockerBuildOutput", true)!;
     console.log("Docker build output:");
     console.log(dockerBuildOutput);
+
+    let foundPath = findPath(dockerBuildOutput, "build");
+    console.log(`Found path: ${foundPath}`);
+}
+
+
+function findPath(dockerBuildOutput: string, thingToFind: string): string | undefined {
+    var paths = dockerBuildOutput.split(/\r?\n/);
+
+    let indexOfLast: number = -1;
+    let foundPath: string | undefined = undefined;
+
+    paths.forEach(str => {
+        var i = str.indexOf(thingToFind);
+        if (i > indexOfLast) {
+            foundPath = str;
+            indexOfLast = i;
+        }
+    });
+
+    return foundPath;
 }
