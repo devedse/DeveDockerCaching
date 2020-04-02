@@ -17,7 +17,7 @@ export function findDockerOutputFilePath(dockerBuildOutput: string, thingToFind:
 
 export function stringNullOrEmpty(input: string | undefined | null): boolean {
     if (input == null || input == undefined || input.length == 0) {
-        return false;
+        return true;
     }
-    return true;
+    return false;
 }
