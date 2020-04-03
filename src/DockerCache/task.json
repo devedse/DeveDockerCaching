@@ -85,7 +85,7 @@
             "name": "cacheImagePostfix",
             "type": "string",
             "label": "Cache Image Postfix",
-            "defaultValue": "-Staging",
+            "defaultValue": "-staging",
             "groupName": "cachingConfiguration",
             "helpMarkDown": "The postfix to append to the cached docker image names. E.g. DeveDocker-Staging where Staging is the PostFix"
         },
