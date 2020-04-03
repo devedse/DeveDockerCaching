@@ -15,9 +15,44 @@ export function findDockerOutputFilePath(dockerBuildOutput: string, thingToFind:
     return foundPath;
 }
 
+export function findIdsInDockerBuildLog(input: string): string[] {
+    const regex = new RegExp("(--->\\s+(?<ID>.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (?<IDLast>.*)$)", 'mg');
+
+    let matches: string[] = [];
+
+    let m;
+    while (m = regex.exec(input)) {
+        matches.push(m.groups!.ID ?? m.groups!.IDLast)
+    }
+
+    console.log(matches);
+
+    return matches;
+}
+
 export function stringNullOrEmpty(input: string | undefined | null): boolean {
     if (input == null || input == undefined || input.length == 0) {
         return true;
     }
     return false;
+}
+
+export function determineFullyQualifiedDockerNamesForTags(matches: string[], imageName: string, repositoryName: string, cacheImagePostfix: string): ImageToTag[] {
+    let fullCacheImageName = imageName.replace(repositoryName, `${repositoryName}${cacheImagePostfix}`);
+
+    let imageNames: ImageToTag[] = [];
+
+    for (let i = 0; i < matches.length; i++) {
+        let match = matches[i];
+        let tagImageName = `${fullCacheImageName}:${i}`;
+
+        imageNames.push({stageId: match, cacheImageName: tagImageName});
+    }
+
+    return imageNames;
+}
+
+interface ImageToTag {
+    stageId: string;
+    cacheImageName: string;
 }

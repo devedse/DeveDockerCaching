@@ -7,6 +7,8 @@ import tmrm = require('azure-pipelines-task-lib/mock-run');
 
 import * as helpers from "../helpers";
 
+import * as fs from "fs";
+
 describe('Sample task tests', function () {
 
     before( function() {
@@ -40,5 +42,31 @@ describe('Sample task tests', function () {
         assert.equal(foundPath, 'src/build_123.txt');
         
         done();
-    });    
+    });
+
+    it('Finds the right file in dockerBuildOutput', function(done: MochaDone) {
+        let fileData = fs.readFileSync('./tests/dockerBuildLogExample.txt', 'utf8');
+
+        let imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
+        
+        console.log(`Found matches: ${imageIdsToPush}`);
+
+        done();
+    });
+
+    it('Generates the right image names', function(done: MochaDone) {
+        let fileData = fs.readFileSync('./tests/dockerBuildLogExample.txt', 'utf8');
+
+        let imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
+        let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, 'testRepo.azurecr.io/superimage', 'superimage', '-staging');
+
+        console.log(`Found matches: ${imageIdsToPush}`);
+        console.log(`Found image names to push:`);
+
+        imageNamesToPush.forEach((val) => {
+            console.log(`Tagging ${val.stageId} as ${val.cacheImageName}`);
+        });
+
+        done();
+    });
 });

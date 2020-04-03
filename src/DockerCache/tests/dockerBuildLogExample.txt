@@ -1,0 +1,205 @@
+Sending build context to Docker daemon  35.84kB
+
+Step 1/31 : FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+3.1-buster-slim: Pulling from dotnet/core/aspnet
+c499e6d256d6: Pulling fs layer
+251bcd0af921: Pulling fs layer
+852994ba072a: Pulling fs layer
+f64c6405f94b: Pulling fs layer
+9347e53e1c3a: Pulling fs layer
+f64c6405f94b: Waiting
+9347e53e1c3a: Waiting
+852994ba072a: Verifying Checksum
+852994ba072a: Download complete
+251bcd0af921: Verifying Checksum
+251bcd0af921: Download complete
+c499e6d256d6: Verifying Checksum
+c499e6d256d6: Download complete
+9347e53e1c3a: Verifying Checksum
+9347e53e1c3a: Download complete
+f64c6405f94b: Verifying Checksum
+f64c6405f94b: Download complete
+c499e6d256d6: Pull complete
+251bcd0af921: Pull complete
+852994ba072a: Pull complete
+f64c6405f94b: Pull complete
+9347e53e1c3a: Pull complete
+Digest: sha256:a9e160dbf5ed62c358f18af8c4daf0d7c0c30f203c0dd8dff94a86598c80003b
+Status: Downloaded newer image for mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim
+ ---> c819eb4381e7
+Step 2/31 : WORKDIR /app
+ ---> Running in b868dd7d6f8d
+Removing intermediate container b868dd7d6f8d
+ ---> 9096b08e8994
+Step 3/31 : EXPOSE 80
+ ---> Running in 19c7f5f40173
+Removing intermediate container 19c7f5f40173
+ ---> 1aa510f5ea86
+Step 4/31 : EXPOSE 443
+ ---> Running in 4083166d04d4
+Removing intermediate container 4083166d04d4
+ ---> cc51282d59e6
+Step 5/31 : FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+3.1-buster: Pulling from dotnet/core/sdk
+f15005b0235f: Pulling fs layer
+41ebfd3d2fd0: Pulling fs layer
+b998346ba308: Pulling fs layer
+f01ec562c947: Pulling fs layer
+de2914a3bce9: Pulling fs layer
+e1060ee932d6: Pulling fs layer
+b2ee07dee813: Pulling fs layer
+f01ec562c947: Waiting
+de2914a3bce9: Waiting
+e1060ee932d6: Waiting
+b2ee07dee813: Waiting
+41ebfd3d2fd0: Verifying Checksum
+41ebfd3d2fd0: Download complete
+b998346ba308: Verifying Checksum
+b998346ba308: Download complete
+de2914a3bce9: Verifying Checksum
+de2914a3bce9: Download complete
+f15005b0235f: Verifying Checksum
+f15005b0235f: Download complete
+f01ec562c947: Verifying Checksum
+f01ec562c947: Download complete
+b2ee07dee813: Verifying Checksum
+b2ee07dee813: Download complete
+e1060ee932d6: Verifying Checksum
+e1060ee932d6: Download complete
+f15005b0235f: Pull complete
+41ebfd3d2fd0: Pull complete
+b998346ba308: Pull complete
+f01ec562c947: Pull complete
+de2914a3bce9: Pull complete
+e1060ee932d6: Pull complete
+b2ee07dee813: Pull complete
+Digest: sha256:ffdaf00ea1408bd71e169a90dbab34914c999674a81fcced8ed919f9a8797dda
+Status: Downloaded newer image for mcr.microsoft.com/dotnet/core/sdk:3.1-buster
+ ---> fc3ec13a2fac
+Step 6/31 : ARG BUILD_VERSION
+ ---> Running in 61099fed0227
+Removing intermediate container 61099fed0227
+ ---> 4fff59b54885
+Step 7/31 : ARG VER=${BUILD_VERSION:-1.0.0}
+ ---> Running in 5124867bc839
+Removing intermediate container 5124867bc839
+ ---> 3cf9c8148c43
+Step 8/31 : WORKDIR /src
+ ---> Running in b106094cf3a4
+Removing intermediate container b106094cf3a4
+ ---> 5d5cd0f8653c
+Step 9/31 : COPY ["DocumentMining.API/DocumentMining.API.csproj", "DocumentMining.API/"]
+ ---> 260c13fc835c
+Step 10/31 : COPY ["DocumentMining.Shared/DocumentMining.Shared.csproj", "DocumentMining.Shared/"]
+ ---> dcd3d252ec42
+Step 11/31 : RUN dotnet restore "DocumentMining.API/DocumentMining.API.csproj"
+ ---> Running in dfe8a51f3739
+  Restore completed in 3.04 sec for /src/DocumentMining.Shared/DocumentMining.Shared.csproj.
+  Restore completed in 4.41 sec for /src/DocumentMining.API/DocumentMining.API.csproj.
+Removing intermediate container dfe8a51f3739
+ ---> 8b9471037838
+Step 12/31 : COPY . .
+ ---> 40948f15fc3f
+Step 13/31 : WORKDIR "/src/DocumentMining.API"
+ ---> Running in 1a923a02ac8d
+Removing intermediate container 1a923a02ac8d
+ ---> 86e63ae64517
+Step 14/31 : RUN dotnet build "DocumentMining.API.csproj" -c Release -o /app/build /p:Version=$VER
+ ---> Running in 47b02be0b3f1
+Microsoft (R) Build Engine version 16.5.0+d4cbfca49 for .NET Core
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Restore completed in 46.94 ms for /src/DocumentMining.Shared/DocumentMining.Shared.csproj.
+  Restore completed in 39.99 ms for /src/DocumentMining.API/DocumentMining.API.csproj.
+  DocumentMining.Shared -> /app/build/DocumentMining.Shared.dll
+Controllers/StatusController.cs(20,40): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/src/DocumentMining.API/DocumentMining.API.csproj]
+Controllers/DocumentsController.cs(27,66): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/src/DocumentMining.API/DocumentMining.API.csproj]
+  DocumentMining.API -> /app/build/DocumentMining.API.dll
+
+Build succeeded.
+
+Controllers/StatusController.cs(20,40): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/src/DocumentMining.API/DocumentMining.API.csproj]
+Controllers/DocumentsController.cs(27,66): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/src/DocumentMining.API/DocumentMining.API.csproj]
+    2 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.35
+Removing intermediate container 47b02be0b3f1
+ ---> 5eb2b049e60c
+Step 15/31 : FROM build AS publish
+ ---> 5eb2b049e60c
+Step 16/31 : ARG BUILD_VERSION
+ ---> Running in e8602ea95305
+Removing intermediate container e8602ea95305
+ ---> c7b7d2496d9d
+Step 17/31 : ARG VER=${BUILD_VERSION:-1.0.0}
+ ---> Running in 1108353a9095
+Removing intermediate container 1108353a9095
+ ---> fafcd1e99aee
+Step 18/31 : RUN dotnet publish "DocumentMining.API.csproj" -c Release -o /app/publish /p:Version=$VER
+ ---> Running in 81bba0ed3208
+Microsoft (R) Build Engine version 16.5.0+d4cbfca49 for .NET Core
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Restore completed in 46.93 ms for /src/DocumentMining.API/DocumentMining.API.csproj.
+  Restore completed in 42.19 ms for /src/DocumentMining.Shared/DocumentMining.Shared.csproj.
+  DocumentMining.Shared -> /src/DocumentMining.Shared/bin/Release/netstandard2.1/DocumentMining.Shared.dll
+Controllers/DocumentsController.cs(27,66): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/src/DocumentMining.API/DocumentMining.API.csproj]
+Controllers/StatusController.cs(20,40): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/src/DocumentMining.API/DocumentMining.API.csproj]
+  DocumentMining.API -> /src/DocumentMining.API/bin/Release/netcoreapp3.1/DocumentMining.API.dll
+  DocumentMining.API -> /app/publish/
+Removing intermediate container 81bba0ed3208
+ ---> bd001208f248
+Step 19/31 : FROM base AS final
+ ---> cc51282d59e6
+Step 20/31 : WORKDIR /app
+ ---> Running in 18e6c7e71827
+Removing intermediate container 18e6c7e71827
+ ---> 0e425d9215bc
+Step 21/31 : COPY --from=publish /app/publish .
+ ---> 2aca085da21d
+Step 22/31 : ENTRYPOINT ["dotnet", "DocumentMining.API.dll"]
+ ---> Running in 572e9c245ea7
+Removing intermediate container 572e9c245ea7
+ ---> b90587fd9b6c
+Step 23/31 : LABEL com.visualstudio.avanadedigitalstudionl.image.build.buildnumber=1332
+ ---> Running in 0b957cf81117
+Removing intermediate container 0b957cf81117
+ ---> 5aab332f7430
+Step 24/31 : LABEL com.visualstudio.avanadedigitalstudionl.image.build.builduri=vstfs:///Build/Build/1332
+ ---> Running in b096442e2510
+Removing intermediate container b096442e2510
+ ---> e0e9b37ce759
+Step 25/31 : LABEL com.visualstudio.avanadedigitalstudionl.image.build.definitionname=DavyDockerCacheTest
+ ---> Running in bcd9feec5724
+Removing intermediate container bcd9feec5724
+ ---> 1e51e329f400
+Step 26/31 : LABEL com.visualstudio.avanadedigitalstudionl.image.build.repository.name=DS-DocumentMining
+ ---> Running in 1fa2d2d4d579
+Removing intermediate container 1fa2d2d4d579
+ ---> b3756c061496
+Step 27/31 : LABEL com.visualstudio.avanadedigitalstudionl.image.build.repository.uri=https://avanadedigitalstudionl.visualstudio.com/DS-DocumentMining/_git/DS-DocumentMining
+ ---> Running in c7597ca0a8c8
+Removing intermediate container c7597ca0a8c8
+ ---> b742862ec2b3
+Step 28/31 : LABEL com.visualstudio.avanadedigitalstudionl.image.build.sourcebranchname=master
+ ---> Running in 6f9ef37bbdbb
+Removing intermediate container 6f9ef37bbdbb
+ ---> 8caf193d90f5
+Step 29/31 : LABEL com.visualstudio.avanadedigitalstudionl.image.build.sourceversion=8ccd3a265b5a2e88891f9c1933c67db45e330580
+ ---> Running in 530222f99631
+Removing intermediate container 530222f99631
+ ---> 548333ef258f
+Step 30/31 : LABEL com.visualstudio.avanadedigitalstudionl.image.system.teamfoundationcollectionuri=https://avanadedigitalstudionl.visualstudio.com/
+ ---> Running in c4660698f7e9
+Removing intermediate container c4660698f7e9
+ ---> 1313f84b86a2
+Step 31/31 : LABEL com.visualstudio.avanadedigitalstudionl.image.system.teamproject=DS-DocumentMining
+ ---> Running in bfe9d04d5572
+Removing intermediate container bfe9d04d5572
+ ---> 9f22ed02f739
+Successfully built 9f22ed02f739
+Successfully tagged ***/coolcontainer:1332
+
+(node:3984) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+##[section]Finishing: Docker Cache - dockerPushCache

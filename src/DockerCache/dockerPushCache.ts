@@ -35,4 +35,35 @@ export function run(connection: ContainerConnection, outputUpdate: (data: string
     let fileData = fs.readFileSync(foundPath!, 'utf8');
 
     console.log(`Docker file data:\n${fileData}`);
+
+    
+    
+    // get qualified image names by combining container registry(s) and repository
+    let repositoryName = tl.getInput("repository")!;
+    let cacheImagePostfix = tl.getInput("cacheImagePostfix")!;
+    let imageNames: string[] = [];    
+    // if container registry is provided, use that
+    // else, use the currently logged in registries
+    if (tl.getInput("containerRegistry")) {
+        let imageName = connection.getQualifiedImageName(repositoryName, true);
+        if (imageName) {
+            imageNames.push(imageName);
+        }
+    }
+    else {
+        imageNames = connection.getQualifiedImageNamesFromConfig(repositoryName, true);
+    }
+    
+    if (imageNames.length != 1) {
+        throw new Error(`ImageName length should be exaclty 1, it is: ${imageNames.length}`);
+    }
+    
+    let imageName = imageNames[0];
+    
+    let imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
+    let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, imageName, repositoryName, cacheImagePostfix);
+
+    imageNamesToPush.forEach((val) => {
+        console.log(`Tagging ${val.stageId} as ${val.cacheImageName}`);
+    });
 }
