@@ -81,8 +81,6 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
     let imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
     let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, imageName, repositoryName, cacheImagePostfix);
 
-    let cacheArgumentDockerBuild = "";
-
     for (let i = 0; i < imageNamesToPush.length; i++) {
         let val = imageNamesToPush[i];
 
@@ -98,11 +96,5 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
         
         console.log("Output:");
         console.log(totalOutput);
-
-        cacheArgumentDockerBuild += `--cache-from=${val.cacheImageName} `;
     }
-
-    console.log(`cacheArgumentDockerBuild: ${cacheArgumentDockerBuild}`);
-
-    tl.setVariable("cacheArgumentDockerBuild", cacheArgumentDockerBuild);
 }

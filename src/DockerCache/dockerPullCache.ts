@@ -57,6 +57,8 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
     
     let stagingImageName = helpers.convertToCachedImageName(imageName, repositoryName, cacheImagePostfix);
 
+    let cacheArgumentDockerBuild = "";
+
     for (let i = 0; i < stagesInDockerFile; i++) {
         let fullImageName = `${stagingImageName}:${i}`;
 
@@ -64,6 +66,12 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
 
         let totalOutput = "Output:";
         await dockerCommandUtils.pull(connection, fullImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`)
-        console.log(totalOutput);
-    }
+        console.log(totalOutput);        
+
+        cacheArgumentDockerBuild += `--cache-from=${fullImageName} `;
+    }    
+
+    console.log(`cacheArgumentDockerBuild: ${cacheArgumentDockerBuild}`);
+
+    tl.setVariable("cacheArgumentDockerBuild", cacheArgumentDockerBuild);
 }
