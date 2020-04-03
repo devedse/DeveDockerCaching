@@ -65,7 +65,7 @@ export function command(connection: ContainerConnection, dockerCommand: string, 
     });
 }
 
-export function push(connection: ContainerConnection, image: string, commandArguments: string, onCommandOut: (image: any, output: any) => any): any {
+export function push(connection: ContainerConnection, image: string, commandArguments: string, onCommandOut: (image: any, output: any) => any): Q.Promise<void> {
     var command = connection.createCommand();
     command.arg("push");
     command.arg(image);
@@ -83,7 +83,7 @@ export function push(connection: ContainerConnection, image: string, commandArgu
     });
 }
 
-export function pull(connection: ContainerConnection, image: string, commandArguments: string, onCommandOut: (image: any, output: any) => any): any {
+export function pull(connection: ContainerConnection, image: string, commandArguments: string, onCommandOut: (image: any, output: any) => any): Q.Promise<void> {
     var command = connection.createCommand();
     command.arg("pull");
     command.arg(image);

@@ -63,7 +63,7 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
         console.log(`Pulling ${fullImageName}`);
 
         let totalOutput = "Output:";
-        dockerCommandUtils.pull(connection, fullImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`)
+        await dockerCommandUtils.pull(connection, fullImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`)
         console.log(totalOutput);
     }
 }
