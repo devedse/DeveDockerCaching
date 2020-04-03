@@ -39,8 +39,13 @@ export function stringNullOrEmpty(input: string | undefined | null): boolean {
     return false;
 }
 
-export function determineFullyQualifiedDockerNamesForTags(matches: string[], imageName: string, repositoryName: string, cacheImagePostfix: string): ImageToTag[] {
+export function convertToCachedImageName(imageName: string, repositoryName: string, cacheImagePostfix: string): string {
     let fullCacheImageName = imageName.replace(repositoryName, `${repositoryName}${cacheImagePostfix}`);
+    return fullCacheImageName;
+}
+
+export function determineFullyQualifiedDockerNamesForTags(matches: string[], imageName: string, repositoryName: string, cacheImagePostfix: string): ImageToTag[] {
+    let fullCacheImageName = convertToCachedImageName(imageName, repositoryName, cacheImagePostfix);
 
     let imageNames: ImageToTag[] = [];
 
@@ -57,4 +62,18 @@ export function determineFullyQualifiedDockerNamesForTags(matches: string[], ima
 interface ImageToTag {
     stageId: string;
     cacheImageName: string;
+}
+
+export function countStagesInDockerFile(dockerFileContent: string): number {
+    const regex = new RegExp("^FROM\\s", 'mg');
+
+    let count: number = 0;
+
+    let m;
+    while (m = regex.exec(dockerFileContent)) {
+        //matches.push(m.groups!.ID ?? m.groups!.IDLast)
+        count += 1;
+    }
+
+    return count;
 }

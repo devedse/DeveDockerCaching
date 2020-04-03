@@ -26,18 +26,10 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
     console.log("Docker build output:");
     console.log(dockerBuildOutput);
 
-    let foundPath = helpers.findDockerOutputFilePath(dockerBuildOutput, "build");
-    console.log(`Found path: ${foundPath}`);
 
-    if (helpers.stringNullOrEmpty(foundPath)) {
-        throw new Error(`Could not find docker output file path in this string:\n${dockerBuildOutput}`);
-    }
-    let fileData = fs.readFileSync(foundPath!, 'utf8');
 
-    console.log(`Docker file data:\n${fileData}`);
 
-    
-    
+
     // get qualified image names by combining container registry(s) and repository
     let repositoryName = tl.getInput("repository")!;
     let cacheImagePostfix = tl.getInput("cacheImagePostfix")!;
@@ -59,6 +51,32 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
     }
     
     let imageName = imageNames[0];
+
+
+
+
+
+
+
+
+
+
+
+    let foundPath = helpers.findDockerOutputFilePath(dockerBuildOutput, "build");
+    console.log(`Found path: ${foundPath}`);
+
+    if (helpers.stringNullOrEmpty(foundPath)) {
+        throw new Error(`Could not find docker output file path in this string:\n${dockerBuildOutput}`);
+    }
+    let fileData = fs.readFileSync(foundPath!, 'utf8');
+
+    console.log(`Docker file data:\n${fileData}`);
+
+
+
+
+
+    
     
     let imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
     let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, imageName, repositoryName, cacheImagePostfix);

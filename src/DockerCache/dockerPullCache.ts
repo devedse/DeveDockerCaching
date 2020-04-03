@@ -9,41 +9,61 @@ import { getDockerRegistryEndpointAuthenticationToken } from "./docker-common-v2
 import * as dockerCommandUtils from "./docker-common-v2/dockercommandutils";
 import * as pipelineUtils from "./docker-common-v2/pipelineutils";
 import * as fileUtils from "./docker-common-v2/fileutils";
+import * as helpers from "./helpers";
 
-export function run(connection: ContainerConnection, outputUpdate: (data: string) => any, isBuildAndPushCommand?: boolean): any {
+export async function run(connection: ContainerConnection, outputUpdate: (data: string) => any, isBuildAndPushCommand?: boolean): Promise<void> {
+
+    console.log("Starting Docker Cache Pull...");
 
     // find dockerfile path
     let dockerfilepath = tl.getInput("Dockerfile", true)!;
     let dockerFile = fileUtils.findDockerFile(dockerfilepath);
 
+    console.log(`Docker file path: ${dockerfilepath}`);
+    console.log(`Docker file: ${dockerFile}`);
 
-    
-        
-    let endpointId = tl.getInput("containerRegistry");
-    let registryAuthenticationToken: RegistryAuthenticationToken = getDockerRegistryEndpointAuthenticationToken(endpointId!);
+
+
 
 
     // get qualified image names by combining container registry(s) and repository
-    let repositoryName = tl.getInput("repository");
+    let repositoryName = tl.getInput("repository")!;
+    let cacheImagePostfix = tl.getInput("cacheImagePostfix")!;
     let imageNames: string[] = [];    
     // if container registry is provided, use that
     // else, use the currently logged in registries
     if (tl.getInput("containerRegistry")) {
-        let imageName = connection.getQualifiedImageName(repositoryName!, true);
+        let imageName = connection.getQualifiedImageName(repositoryName, true);
         if (imageName) {
             imageNames.push(imageName);
         }
     }
     else {
-        imageNames = connection.getQualifiedImageNamesFromConfig(repositoryName!, true);
+        imageNames = connection.getQualifiedImageNamesFromConfig(repositoryName, true);
     }
+    
+    if (imageNames.length != 1) {
+        throw new Error(`ImageName length should be exaclty 1, it is: ${imageNames.length}`);
+    }
+    
+    let imageName = imageNames[0];
+    
 
-    // if (imageNames.length > 1) {
-    //     tl.setResult(tl.TaskResult.Failed, 'More then one ');
-    // }
 
-    console.log("Image names:");
-    imageNames.forEach(imageName => {
-        console.log(`Image Name Found: ${imageName.replace('e', '<e>')}`);
-    });
+
+    let dockerFileContent = fs.readFileSync(dockerFile, 'utf8');
+    let stagesInDockerFile = helpers.countStagesInDockerFile(dockerFileContent);
+
+    
+    let stagingImageName = helpers.convertToCachedImageName(imageName, repositoryName, cacheImagePostfix);
+
+    for (let i = 0; i < stagesInDockerFile; i++) {
+        let fullImageName = `${stagingImageName}:${i}`;
+
+        console.log(`Pulling ${fullImageName}`);
+
+        let totalOutput = "Output:";
+        dockerCommandUtils.pull(connection, fullImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`)
+        console.log(totalOutput);
+    }
 }
