@@ -66,11 +66,16 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
     for (let i = 0; i < imageNamesToPush.length; i++) {
         let val = imageNamesToPush[i];
 
-        console.log(`Tagging ${val.stageId} as ${val.cacheImageName}`);
+        console.log(`Tagging ${val.stageId} as ${val.cacheImageName}...`);
 
-        let totalOutput = "";
-        await dockerCommandUtils.command(connection, 'tag', `"${val.stageId}" "${val.cacheImageName}"`, (thisOutput) => { totalOutput += `${thisOutput}\n` });
+        let totalOutput = "Tag:";
+        await dockerCommandUtils.command(connection, 'tag', `"${val.stageId}" "${val.cacheImageName}"`, (thisOutput) => totalOutput += `${thisOutput}\n`);
 
+        console.log(`Pushing ${val.cacheImageName}...`);
+
+        totalOutput += "\n\nPush:\n"
+        await dockerCommandUtils.push(connection, val.cacheImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`);
+        
         console.log("Output:");
         console.log(totalOutput);
     }

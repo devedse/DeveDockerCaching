@@ -161,7 +161,7 @@ export default class ContainerConnection {
                     let existingConfigJson = this.getDockerConfigJson(existingConfigurationFile);
                     if (existingConfigJson && existingConfigJson.auths && existingConfigJson.auths[registry]) {
                         if (Object.keys(existingConfigJson.auths).length > 1) {
-                            // if the config contains other auths, then delete only the auth entry for the registry
+                            // if the config contains other auths, then delete only the auth entry for the regist`ry
                             tl.debug(tl.loc('FoundLoginsForOtherRegistries', registry));                        
                             delete existingConfigJson.auths[registry];
                             let dockerConfigContent = JSON.stringify(existingConfigJson);
