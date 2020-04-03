@@ -16,13 +16,15 @@ export function findDockerOutputFilePath(dockerBuildOutput: string, thingToFind:
 }
 
 export function findIdsInDockerBuildLog(input: string): string[] {
-    const regex = new RegExp("(--->\\s+(?<ID>.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (?<IDLast>.*)$)", 'mg');
+    //const regex = new RegExp("(--->\\s+(?<ID>.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (?<IDLast>.*)$)", 'mg');
+    const regex = new RegExp("(?:--->\\s+(.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (.*)$)", 'mg');
 
     let matches: string[] = [];
 
     let m;
     while (m = regex.exec(input)) {
-        matches.push(m.groups!.ID ?? m.groups!.IDLast)
+        //matches.push(m.groups!.ID ?? m.groups!.IDLast)
+        matches.push(m[1] ?? m[2]);
     }
 
     console.log(matches);
