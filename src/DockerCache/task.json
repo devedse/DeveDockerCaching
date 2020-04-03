@@ -100,6 +100,12 @@
             "helpMarkDown": "The output variable value from the Docker build output. This can be found in the 'Output Variables' for the Docker build command."
         }
     ],
+    "outputVariables": [
+        {
+            "name": "cacheArgumentDockerBuild",
+            "description": "The argument you should pass to your docker build command. It contains the --cache-from=.... items to be able to use caching"
+        }
+    ],
     "execution": {
         "Node10": {
             "target": "index.js"
