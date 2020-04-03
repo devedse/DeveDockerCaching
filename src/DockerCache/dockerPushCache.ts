@@ -11,7 +11,7 @@ import * as pipelineUtils from "./docker-common-v2/pipelineutils";
 import * as fileUtils from "./docker-common-v2/fileutils";
 import * as helpers from "./helpers";
 
-export function run(connection: ContainerConnection, outputUpdate: (data: string) => any, isBuildAndPushCommand?: boolean): any {
+export async function run(connection: ContainerConnection, outputUpdate: (data: string) => any, isBuildAndPushCommand?: boolean): any {
 
     console.log("Starting Docker Cache Push...");
 
@@ -63,7 +63,15 @@ export function run(connection: ContainerConnection, outputUpdate: (data: string
     let imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
     let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, imageName, repositoryName, cacheImagePostfix);
 
-    imageNamesToPush.forEach((val) => {
+    for (let i = 0; i < imageNamesToPush.length; i++) {
+        let val = imageNamesToPush[i];
+
         console.log(`Tagging ${val.stageId} as ${val.cacheImageName}`);
-    });
+
+        let totalOutput = "";
+        await dockerCommandUtils.command(connection, 'tag', `"${val.stageId}" "${val.cacheImageName}"`, (thisOutput) => { totalOutput = thisOutput });
+
+        console.log("Output:");
+        console.log(totalOutput);
+    }
 }

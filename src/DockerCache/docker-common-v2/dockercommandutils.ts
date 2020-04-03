@@ -48,7 +48,7 @@ export function build(connection: ContainerConnection, dockerFile: string, comma
     });
 }
 
-export function command(connection: ContainerConnection, dockerCommand: string, commandArguments: string, onCommandOut: (output: any) => any): any {
+export function command(connection: ContainerConnection, dockerCommand: string, commandArguments: string, onCommandOut: (output: any) => any): Q.Promise<void> {
     let command = connection.createCommand();
     command.arg(dockerCommand);
     command.line(commandArguments);

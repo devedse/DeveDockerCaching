@@ -38,7 +38,7 @@ export default class ContainerConnection {
         return command;
     }
 
-    public execCommand(command: tr.ToolRunner, options?: tr.IExecOptions) {
+    public execCommand(command: tr.ToolRunner, options?: tr.IExecOptions): Q.Promise<number> {
         let errlines = Array<string>();
         let dockerHostVar = tl.getVariable("DOCKER_HOST");
         if (dockerHostVar) {
