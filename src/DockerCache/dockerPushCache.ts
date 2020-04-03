@@ -11,7 +11,7 @@ import * as pipelineUtils from "./docker-common-v2/pipelineutils";
 import * as fileUtils from "./docker-common-v2/fileutils";
 import * as helpers from "./helpers";
 
-export async function run(connection: ContainerConnection, outputUpdate: (data: string) => any, isBuildAndPushCommand?: boolean): any {
+export async function run(connection: ContainerConnection, outputUpdate: (data: string) => any, isBuildAndPushCommand?: boolean): Promise<void> {
 
     console.log("Starting Docker Cache Push...");
 
