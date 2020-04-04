@@ -59,18 +59,21 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
 
     let cacheArgumentDockerBuild = "";
 
-    for (let i = 0; i < stagesInDockerFile; i++) {
-        let fullImageName = `${stagingImageName}:${i}`;
+    try {
+        for (let i = 0; i < stagesInDockerFile; i++) {
+            let fullImageName = `${stagingImageName}:${i}`;
 
-        console.log(`Pulling ${fullImageName}`);
+            console.log(`Pulling ${fullImageName}`);
 
-        let totalOutput = "Output:";
-        await dockerCommandUtils.pull(connection, fullImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`)
-        console.log(totalOutput);        
+            let totalOutput = "Output:";
+            await dockerCommandUtils.pull(connection, fullImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`)
+            console.log(totalOutput);        
 
-        cacheArgumentDockerBuild += `--cache-from=${fullImageName} `;
-    }    
-
+            cacheArgumentDockerBuild += `--cache-from=${fullImageName} `;
+        }    
+    } catch (ex) {
+        console.log("Warning, couldn't find cached containers");
+    }
     console.log(`cacheArgumentDockerBuild: ${cacheArgumentDockerBuild}`);
 
     tl.setVariable("cacheArgumentDockerBuild", cacheArgumentDockerBuild);
