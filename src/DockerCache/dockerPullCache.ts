@@ -58,9 +58,9 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
     let stagingImageName = helpers.convertToCachedImageName(imageName, repositoryName, cacheImagePostfix);
 
     let cacheArgumentDockerBuild = "";
-
+    let i = 0;
     try {
-        for (let i = 0; i < stagesInDockerFile; i++) {
+        for (i = 0; i < stagesInDockerFile; i++) {
             let fullImageName = `${stagingImageName}:${i}`;
 
             console.log(`Pulling ${fullImageName}`);
@@ -72,7 +72,7 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
             cacheArgumentDockerBuild += `--cache-from=${fullImageName} `;
         }    
     } catch (ex) {
-        console.log("Warning, couldn't find cached containers");
+        console.log(`Warning, couldn't find cached container with name '${stagingImageName}:${i}. This could be because this is the first run. Exception: ${ex}`);
     }
     console.log(`cacheArgumentDockerBuild: ${cacheArgumentDockerBuild}`);
 
