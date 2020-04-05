@@ -14,39 +14,39 @@ const hostType = tl.getVariable("System.HostType");
 const isBuild = hostType && hostType.toLowerCase() === buildString;
 const matchPatternForDigest = new RegExp(/sha256\:(.+)/);
 
-export function build(connection: ContainerConnection, dockerFile: string, commandArguments: string, labelArguments: string[], tagArguments: string[], onCommandOut: (output: any) => any): any {
-    var command = connection.createCommand();
+// export function build(connection: ContainerConnection, dockerFile: string, commandArguments: string, labelArguments: string[], tagArguments: string[], onCommandOut: (output: any) => any): any {
+//     var command = connection.createCommand();
 
-    command.arg("build");
-    command.arg(["-f", dockerFile]);
+//     command.arg("build");
+//     command.arg(["-f", dockerFile]);
 
-    if (labelArguments) {
-        labelArguments.forEach(label => {
-            command.arg(["--label", label]);
-        });
-    }
+//     if (labelArguments) {
+//         labelArguments.forEach(label => {
+//             command.arg(["--label", label]);
+//         });
+//     }
 
-    command.line(commandArguments);
+//     command.line(commandArguments);
 
-    if (tagArguments) {
-        tagArguments.forEach(tagArgument => {
-            command.arg(["-t", tagArgument]);
-        });
-    }
+//     if (tagArguments) {
+//         tagArguments.forEach(tagArgument => {
+//             command.arg(["-t", tagArgument]);
+//         });
+//     }
 
-    command.arg(getBuildContext(dockerFile));
+//     command.arg(getBuildContext(dockerFile));
 
-    // setup variable to store the command output
-    let output = "";
-    command.on("stdout", data => {
-        output += data;
-    });
+//     // setup variable to store the command output
+//     let output = "";
+//     command.on("stdout", data => {
+//         output += data;
+//     });
 
-    return connection.execCommand(command).then(() => {
-        // Return the std output of the command by calling the delegate
-        onCommandOut(output);
-    });
-}
+//     return connection.execCommand(command).then(() => {
+//         // Return the std output of the command by calling the delegate
+//         onCommandOut(output);
+//     });
+// }
 
 export function command(connection: ContainerConnection, dockerCommand: string, commandArguments: string, onCommandOut: (output: any) => any): Q.Promise<void> {
     let command = connection.createCommand();
@@ -131,41 +131,41 @@ export function getPipelineLogsUrl(): string {
     return pipelineUrl;
 }
 
-export function getBuildAndPushArguments(dockerFile: string, labelArguments: string[], tagArguments: string[]): { [key: string]: string } {
-    let labelArgumentsString = "";
-    let tagArgumentsString = "";
-    if (labelArguments && labelArguments.length > 0) {
-        labelArgumentsString = labelArguments.join(", ");
-    }
+// export function getBuildAndPushArguments(dockerFile: string, labelArguments: string[], tagArguments: string[]): { [key: string]: string } {
+//     let labelArgumentsString = "";
+//     let tagArgumentsString = "";
+//     if (labelArguments && labelArguments.length > 0) {
+//         labelArgumentsString = labelArguments.join(", ");
+//     }
 
-    if (tagArguments && tagArguments.length > 0) {
-        tagArgumentsString = tagArguments.join(", ");
-    }
+//     if (tagArguments && tagArguments.length > 0) {
+//         tagArgumentsString = tagArguments.join(", ");
+//     }
 
-    let buildArguments = {
-        "dockerFilePath": dockerFile,
-        "labels": labelArgumentsString,
-        "tags": tagArgumentsString,
-        "context": getBuildContext(dockerFile)
-    };
+//     let buildArguments = {
+//         "dockerFilePath": dockerFile,
+//         "labels": labelArgumentsString,
+//         "tags": tagArgumentsString,
+//         "context": getBuildContext(dockerFile)
+//     };
 
-    return buildArguments;
-}
+//     return buildArguments;
+// }
 
-export function getBuildContext(dockerFile: string): string {
-    let buildContext = tl.getPathInput("buildContext");
-    if (useDefaultBuildContext(buildContext!)) {
-        buildContext = path.dirname(dockerFile);
-    }
+// export function getBuildContext(dockerFile: string): string {
+//     let buildContext = tl.getPathInput("buildContext");
+//     if (useDefaultBuildContext(buildContext!)) {
+//         buildContext = path.dirname(dockerFile);
+//     }
 
-    return buildContext!;
-}
+//     return buildContext!;
+// }
 
-export function useDefaultBuildContext(buildContext: string): boolean {
-    let defaultWorkingDir = tl.getVariable("SYSTEM_DEFAULTWORKINGDIRECTORY");
-    let defaultPath = path.join(defaultWorkingDir!, "**");
-    return buildContext === defaultPath;
-}
+// export function useDefaultBuildContext(buildContext: string): boolean {
+//     let defaultWorkingDir = tl.getVariable("SYSTEM_DEFAULTWORKINGDIRECTORY");
+//     let defaultPath = path.join(defaultWorkingDir!, "**");
+//     return buildContext === defaultPath;
+// }
 
 export function getPipelineUrl(): string {
     let pipelineUrl = "";

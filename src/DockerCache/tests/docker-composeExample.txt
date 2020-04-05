@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+  coolimage.service:
+    image: ${DOCKER_REGISTRY-}coolimageservice
+    ports:
+      - "8000"
+    build:
+      context: .
+      dockerfile: coolimage.Service/Dockerfile
+      args:
+        - PAT=${PAT}
+        - BUILD_VERSION=${BUILD_VERSION}
+  coolimage.service.cdcprocessor:
+    image: ${DOCKER_REGISTRY-}coolimageservicecdcprocessor
+    ports:
+      - "8000"
+    build:
+      context: .
+      dockerfile: coolimage.Service.CDCProcessor/Dockerfile
+      args:
+        - PAT=${PAT}
+        - BUILD_VERSION=${BUILD_VERSION}
+  coolimage.service.eventpublisher:
+    image: ${DOCKER_REGISTRY-}coolimageserviceeventpublisher
+    ports:
+      - "8000"
+    build:
+      context: .
+      dockerfile: coolimage.Service.EventPublisher/Dockerfile
+      args:
+        - PAT=${PAT}
+        - BUILD_VERSION=${BUILD_VERSION}
+  coolimage.service.eventconsumer:
+    image: ${DOCKER_REGISTRY-}coolimageserviceeventconsumer
+    ports:
+      - "8000"
+    build:
+      context: .
+      dockerfile: coolimage.Service.EventConsumer/Dockerfile
+      args:
+        - PAT=${PAT}
+        - BUILD_VERSION=${BUILD_VERSION}

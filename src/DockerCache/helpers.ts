@@ -1,3 +1,18 @@
+import YAML from 'yaml';
+
+export function execRegex(input: string, regexString: string) : RegExpExecArray[] {
+    const regex = new RegExp(regexString, 'mg');
+
+    let matches: RegExpExecArray[] = [];
+
+    let m;
+    while (m = regex.exec(input)) {
+        matches.push(m);
+    }
+
+    return matches;
+}
+
 export function findDockerOutputFilePath(dockerBuildOutput: string, thingToFind: string): string | undefined {
     var paths = dockerBuildOutput.split(/\r?\n/);
 
@@ -17,14 +32,15 @@ export function findDockerOutputFilePath(dockerBuildOutput: string, thingToFind:
 
 export function findIdsInDockerBuildLog(input: string): string[] {
     //const regex = new RegExp("(--->\\s+(?<ID>.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (?<IDLast>.*)$)", 'mg');
-    const regex = new RegExp("(?:--->\\s+(.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (.*)$)", 'mg');
+    //const regex = new RegExp("(?:--->\\s+(.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (.*)$)", 'mg');
 
+    const regexMatches = execRegex(input, "(?:--->\\s+(.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (.*)$)");
+    
     let matches: string[] = [];
 
-    let m;
-    while (m = regex.exec(input)) {
-        //matches.push(m.groups!.ID ?? m.groups!.IDLast)
-        matches.push(m[1] ?? m[2]);
+    for (let i = 0; i < regexMatches.length; i++) {
+        let match = regexMatches[i];
+        matches.push(match[1] ?? match[2]);
     }
 
     console.log(matches);
@@ -76,4 +92,99 @@ export function countStagesInDockerFile(dockerFileContent: string): number {
     }
 
     return count;
+}
+
+export function findImageNamesInDockerComposeFile(dockerComposeFileContent: string): ServiceAndImage[] {
+    let parsed = YAML.parse(dockerComposeFileContent);
+    let keys = Object.keys(parsed.services);
+    let entries = <any[]>Object.values(parsed.services);
+
+    let imageNames: ServiceAndImage[] = [];
+
+    for (let i = 0; i < entries.length; i++) {
+        let entry = entries[i];
+        let key = keys[i];
+
+        console.log(key);
+        console.log(entry.image);
+
+        imageNames.push({ serviceName: key, imageName: entry.image, buildLogForThisImage: "", indexInLog: undefined });
+    }
+
+    return imageNames;
+}
+
+interface ServiceAndImage {
+    serviceName: string;
+    imageName: string;
+    buildLogForThisImage: string;
+    indexInLog: number | undefined;
+}
+
+function findNextHighestIndex(dockerComposeImages: ServiceAndImage[], index: number): number {
+    let curLowest: number = Number.MAX_SAFE_INTEGER;
+
+    for (let i = 0; i < dockerComposeImages.length; i++) {
+        let curItem = dockerComposeImages[i];
+
+        if (curItem.indexInLog != undefined && curItem.indexInLog > index && curItem.indexInLog < curLowest) {
+            curLowest = curItem.indexInLog;
+        }
+    }
+
+    return curLowest;
+}
+
+export function splitDockerComposeBuildLog(dockerComposeImages: ServiceAndImage[], dockerComposeBuildLog: string): ServiceAndImage[] {
+    console.log();
+
+    for (let i = 0; i < dockerComposeImages.length; i++) {
+        let item = dockerComposeImages[i];
+
+        let escapedServiceName = escapeRegExp(item.serviceName);
+        let textToSearchFor = `^Building ${escapedServiceName}[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM`;
+
+        console.log(`Looking for ${textToSearchFor}`);
+        const regexMatches = execRegex(dockerComposeBuildLog, textToSearchFor);
+
+        if (regexMatches.length > 1) {
+            console.log(`Warning, found more then 1 match for regex: ${textToSearchFor} ${regexMatches}`);
+        } else if (regexMatches.length == 0) {
+            console.log(`Error, could not find match for regex: ${textToSearchFor} in docker build log.`);
+            continue;
+        }
+
+        let match = regexMatches[0];
+        item.indexInLog = match.index;
+    }
+
+    console.log();
+
+    for (let i = 0; i < dockerComposeImages.length; i++) {
+        let item = dockerComposeImages[i];
+
+        if (item.indexInLog != undefined) {
+            let nextHighest = findNextHighestIndex(dockerComposeImages, item.indexInLog);
+            if (nextHighest == -1) {
+                nextHighest = dockerComposeBuildLog.length;
+            }
+            let str = dockerComposeBuildLog.substr(item.indexInLog, nextHighest - item.indexInLog);
+            
+            item.buildLogForThisImage = str.trim();
+        }
+        else {
+            console.log(`Could not find index for item: ${item.serviceName}`);
+        }
+
+        console.log(`#### ${i} #### ${item.serviceName}\n#### Index in log: ${item.indexInLog}\n#### Length in log: ${item.buildLogForThisImage?.length}\n\n`);
+
+        // console.log(item.buildLogForThisImage);
+    }
+    
+    return dockerComposeImages;
+}
+
+export function escapeRegExp(input: string) : string {
+    //return input;
+    return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }

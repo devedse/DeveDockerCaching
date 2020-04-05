@@ -9,11 +9,11 @@ import { getDockerRegistryEndpointAuthenticationToken } from "./docker-common-v2
 import * as dockerCommandUtils from "./docker-common-v2/dockercommandutils";
 import * as pipelineUtils from "./docker-common-v2/pipelineutils";
 import * as fileUtils from "./docker-common-v2/fileutils";
+import * as helpers from "./helpers";
 
-export function run(connection: ContainerConnection, outputUpdate: (data: string) => any, isBuildAndPushCommand?: boolean): any {
-
+export async function run(connection: ContainerConnection, outputUpdate: (data: string) => any, isBuildAndPushCommand?: boolean): Promise<void> {
     // find dockerfile path
-    let dockerfilepath = tl.getInput("Dockerfile", true)!;
+    let dockerfilepath = tl.getInput("DockerComposefile", true)!;
     let dockerFile = fileUtils.findDockerFile(dockerfilepath);
 
 }

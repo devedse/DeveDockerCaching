@@ -69,4 +69,42 @@ describe('Sample task tests', function () {
 
         done();
     });
+
+    it('Parses image names from docker-compose.yml', function(done: MochaDone) {
+        let fileData = fs.readFileSync('./tests/docker-composeExample.txt', 'utf8');
+
+        let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(fileData);
+
+        console.log(`Found images in docker compose file: ${imageNamesDockerCompose}`);
+        
+        assert.equal(imageNamesDockerCompose[0].serviceName, 'coolimage.service');
+        assert.equal(imageNamesDockerCompose[0].imageName, '${DOCKER_REGISTRY-}coolimageservice');
+        assert.equal(imageNamesDockerCompose[1].serviceName, 'coolimage.service.cdcprocessor');
+        assert.equal(imageNamesDockerCompose[1].imageName, '${DOCKER_REGISTRY-}coolimageservicecdcprocessor');
+        assert.equal(imageNamesDockerCompose[2].serviceName, 'coolimage.service.eventpublisher');
+        assert.equal(imageNamesDockerCompose[2].imageName, '${DOCKER_REGISTRY-}coolimageserviceeventpublisher');
+        assert.equal(imageNamesDockerCompose[3].serviceName, 'coolimage.service.eventconsumer');
+        assert.equal(imageNamesDockerCompose[3].imageName, '${DOCKER_REGISTRY-}coolimageserviceeventconsumer');
+
+        done();
+    });
+
+    it('Splits the docker compose output log', function(done: MochaDone) {
+        let fileData = fs.readFileSync('./tests/docker-composeExample.txt', 'utf8');
+        let dockerComposeBuildLog = fs.readFileSync('./tests/dockerComposeBuildLogExample.txt', 'utf8');
+
+        let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(fileData);
+        helpers.splitDockerComposeBuildLog(imageNamesDockerCompose, dockerComposeBuildLog);
+
+        assert.ok(imageNamesDockerCompose[0].buildLogForThisImage.startsWith("Building coolimage.service"), 'StartsWith failed for 0');
+        assert.ok(imageNamesDockerCompose[1].buildLogForThisImage.startsWith("Building coolimage.service.cdcprocessor"), 'StartsWith failed for 1');
+        assert.ok(imageNamesDockerCompose[2].buildLogForThisImage.startsWith("Building coolimage.service.eventpublisher"), 'StartsWith failed for 2');
+        assert.ok(imageNamesDockerCompose[3].buildLogForThisImage.startsWith("Building coolimage.service.eventconsumer"), 'StartsWith failed for 3');
+        assert.ok(imageNamesDockerCompose[0].buildLogForThisImage.endsWith("Successfully tagged containerregistry.azurecr.io/coolimageservice:latest"), 'EndsWith failed for 0');
+        assert.ok(imageNamesDockerCompose[1].buildLogForThisImage.endsWith("Successfully tagged containerregistry.azurecr.io/coolimageservicecdcprocessor:latest"), 'EndsWith failed for 1');
+        assert.ok(imageNamesDockerCompose[2].buildLogForThisImage.endsWith("[section]Finishing: Build services"), 'EndsWith failed for 2');
+        assert.ok(imageNamesDockerCompose[3].buildLogForThisImage.endsWith("Successfully tagged containerregistry.azurecr.io/coolimageserviceeventconsumer:latest"), 'EndsWith failed for 0');
+
+        done();
+    });
 });
