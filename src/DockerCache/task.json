@@ -98,6 +98,18 @@
             "helpMarkDown": "Additional Docker Compose files to be combined with the primary Docker Compose file. Relative paths are resolved relative to the directory containing the primary Docker Compose file. If a specified file is not found, it is ignored. Specify each file path on a new line."
         },
         {
+            "name": "dockerComposeFileArgs",
+            "type": "multiLine",
+            "properties": {
+                "resizable": "true",
+                "rows": "2"
+            },
+            "label": "Environment Variables",
+            "groupName": "cachingConfiguration",
+            "visibleRule": "action = dockerComposePullCache || action = dockerComposePushCache",
+            "helpMarkDown": "Environment variables to be set during the command. Specify each name=value pair on a new line."
+        },
+        {
             "name": "cacheImagePostfix",
             "type": "string",
             "label": "Cache Image Postfix",
