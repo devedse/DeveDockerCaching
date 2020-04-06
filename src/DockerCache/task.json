@@ -15,6 +15,11 @@
     "instanceNameFormat": "Docker Cache - $(action)",
     "groups": [
         {
+            "name": "action",
+            "displayName": "Action",
+            "isExpanded": true
+        },
+        {
             "name": "containerRepository",
             "displayName": "Container Repository",
             "isExpanded": true
@@ -26,6 +31,24 @@
         }
     ],
     "inputs": [
+        {
+            "name": "action",
+            "type": "pickList",
+            "label": "Cache Action",
+            "defaultValue": "dockerPullCache",
+            "required": true,
+            "options": {
+                "dockerPullCache": "dockerPullCache",
+                "dockerPushCache": "dockerPushCache",
+                "dockerComposePullCache": "dockerComposePullCache",
+                "dockerComposePushCache": "dockerComposePushCache"
+            },
+            "properties": {
+                "EditableOptions": "False"
+            },
+            "groupName": "action",
+            "helpMarkDown": "Select action."
+        },
         {	
             "name": "containerRegistry",	
             "type": "connectedService:dockerregistry",	
@@ -46,24 +69,6 @@
             "properties": {	
                 "EditableOptions": "True"	
             }
-        },
-        {
-            "name": "action",
-            "type": "pickList",
-            "label": "Cache Action",
-            "defaultValue": "dockerPullCache",
-            "required": true,
-            "options": {
-                "dockerPullCache": "dockerPullCache",
-                "dockerPushCache": "dockerPushCache",
-                "dockerComposePullCache": "dockerComposePullCache",
-                "dockerComposePushCache": "dockerComposePushCache"
-            },
-            "properties": {
-                "EditableOptions": "False"
-            },
-            "groupName": "cachingConfiguration",
-            "helpMarkDown": "Select action."
         },
         {
             "name": "Dockerfile",
