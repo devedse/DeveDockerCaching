@@ -15,16 +15,6 @@
     "instanceNameFormat": "Docker Cache - $(action)",
     "groups": [
         {
-            "name": "action",
-            "displayName": "Action",
-            "isExpanded": true
-        },
-        {
-            "name": "containerRepository",
-            "displayName": "Container Repository",
-            "isExpanded": true
-        },
-        {
             "name": "cachingConfiguration",
             "displayName": "Docker Caching Configuration",
             "isExpanded": true
@@ -46,14 +36,14 @@
             "properties": {
                 "EditableOptions": "False"
             },
-            "groupName": "action",
+            "groupName": "cachingConfiguration",
             "helpMarkDown": "Select action."
         },
         {	
             "name": "containerRegistry",	
             "type": "connectedService:dockerregistry",	
             "label": "Container registry",	
-            "groupName": "containerRepository",	
+            "groupName": "cachingConfiguration",	
             "required": false,
             "helpMarkDown": "Select a Docker registry service connection. Required for commands that need to authenticate with a registry."	
         },	
@@ -65,7 +55,7 @@
             "helpMarkDown": "Name of the repository.",	
             "defaultValue": "",
             "visibleRule": "action = dockerPushCache || action = dockerPullCache",
-            "groupName": "containerRepository",
+            "groupName": "cachingConfiguration",
             "properties": {	
                 "EditableOptions": "True"	
             }
