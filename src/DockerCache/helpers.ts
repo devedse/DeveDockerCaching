@@ -55,13 +55,18 @@ export function stringNullOrEmpty(input: string | undefined | null): boolean {
     return false;
 }
 
-export function convertToCachedImageName(imageName: string, repositoryName: string, cacheImagePostfix: string): string {
-    let fullCacheImageName = imageName.replace(repositoryName, `${repositoryName}${cacheImagePostfix}`);
-    return fullCacheImageName;
+export function convertToCachedImageName(imageName: string, cacheImagePostfix: string): string {
+    let lastIndex = imageName.lastIndexOf(":");
+    if (lastIndex != -1) {
+        imageName = imageName.substring(0, lastIndex);
+    }
+
+    imageName += cacheImagePostfix;
+    return imageName;
 }
 
-export function determineFullyQualifiedDockerNamesForTags(matches: string[], imageName: string, repositoryName: string, cacheImagePostfix: string): ImageToTag[] {
-    let fullCacheImageName = convertToCachedImageName(imageName, repositoryName, cacheImagePostfix);
+export function determineFullyQualifiedDockerNamesForTags(matches: string[], imageName: string, cacheImagePostfix: string): ImageToTag[] {
+    let fullCacheImageName = convertToCachedImageName(imageName, cacheImagePostfix);
 
     let imageNames: ImageToTag[] = [];
 

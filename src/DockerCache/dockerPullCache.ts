@@ -55,7 +55,7 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
     let stagesInDockerFile = helpers.countStagesInDockerFile(dockerFileContent);
 
     
-    let stagingImageName = helpers.convertToCachedImageName(imageName, repositoryName, cacheImagePostfix);
+    let stagingImageName = helpers.convertToCachedImageName(imageName, cacheImagePostfix);
 
     let cacheArgumentDockerBuild = "";
     let i = 0;

@@ -16,13 +16,13 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
     console.log("Starting Docker Compose Cache Push...");
 
     // find dockerfile path
-    let dockerfilepath = tl.getInput("DockerComposefile", true)!;
-    let dockerFile = fileUtils.findDockerFile(dockerfilepath);
+    // let dockerfilepath = tl.getInput("DockerComposefile", true)!;
+    // let dockerFile = fileUtils.findDockerFile(dockerfilepath);
 
-    console.log(`Docker Compose file path: ${dockerfilepath}`);
-    console.log(`Docker Compose file: ${dockerFile}`);
+    // console.log(`Docker Compose file path: ${dockerfilepath}`);
+    // console.log(`Docker Compose file: ${dockerFile}`);
 
-    let dockerComposeFileContent = fs.readFileSync(dockerFile!, 'utf8');
+    //let dockerComposeFileContent = fs.readFileSync(dockerFile!, 'utf8');
 
     let dockerBuildOutput = tl.getInput("dockerBuildOutput", true)!;
     console.log("Docker build output:");
@@ -81,36 +81,42 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
         let finalComposeFile = fs.readFileSync(dockerComposeConnection.finalComposeFile, 'utf8');
 
         console.log(`Final compose file:\n${finalComposeFile}`);
+
+
+        let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(finalComposeFile);
+        imageNamesDockerCompose = helpers.splitDockerComposeBuildLog(imageNamesDockerCompose, fileData);
+
+
+        for (let y = 0; y < imageNamesDockerCompose.length; y++) {
+            let curItem = imageNamesDockerCompose[y];
+
+
+            let imageIdsToPush = helpers.findIdsInDockerBuildLog(curItem.buildLogForThisImage);
+            let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, curItem.imageName, cacheImagePostfix);
+
+            for (let i = 0; i < imageNamesToPush.length; i++) {
+                let val = imageNamesToPush[i];
+
+                console.log(`Tagging ${val.stageId} as ${val.cacheImageName}...`);
+
+                let totalOutput = "Tag:";
+                await dockerCommandUtils.command(connection, 'tag', `"${val.stageId}" "${val.cacheImageName}"`, (thisOutput) => totalOutput += `${thisOutput}\n`);
+
+                console.log(`Pushing ${val.cacheImageName}...`);
+
+                totalOutput += "\n\nPush:\n"
+                await dockerCommandUtils.push(connection, val.cacheImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`);
+                
+                console.log("Output:");
+                console.log(totalOutput);
+            }
+        }
     }
     finally {
         dockerComposeConnection.close();
     }
 
-    // let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(fileData);
-    // imageNamesDockerCompose = helpers.splitDockerComposeBuildLog(imageNamesDockerCompose, dockerBuildOutput);
-
-    // for (let y = 0; y < imageNamesDockerCompose.length; y++) {
-    //     let curItem = imageNamesDockerCompose[y];
 
 
-    //     // let imageIdsToPush = helpers.findIdsInDockerBuildLog(curItem.buildLogForThisImage);
-    //     // let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, imageName, repositoryName, cacheImagePostfix);
 
-    //     // for (let i = 0; i < imageNamesToPush.length; i++) {
-    //     //     let val = imageNamesToPush[i];
-
-    //     //     console.log(`Tagging ${val.stageId} as ${val.cacheImageName}...`);
-
-    //     //     let totalOutput = "Tag:";
-    //     //     await dockerCommandUtils.command(connection, 'tag', `"${val.stageId}" "${val.cacheImageName}"`, (thisOutput) => totalOutput += `${thisOutput}\n`);
-
-    //     //     console.log(`Pushing ${val.cacheImageName}...`);
-
-    //     //     totalOutput += "\n\nPush:\n"
-    //     //     await dockerCommandUtils.push(connection, val.cacheImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`);
-            
-    //     //     console.log("Output:");
-    //     //     console.log(totalOutput);
-    //     // }
-    // }
 }

@@ -58,7 +58,7 @@ describe('Sample task tests', function () {
         let fileData = fs.readFileSync('./tests/dockerBuildLogExample.txt', 'utf8');
 
         let imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
-        let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, 'testRepo.azurecr.io/superimage', 'superimage', '-staging');
+        let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, 'testRepo.azurecr.io/superimage', '-staging');
 
         console.log(`Found matches: ${imageIdsToPush}`);
         console.log(`Found image names to push:`);

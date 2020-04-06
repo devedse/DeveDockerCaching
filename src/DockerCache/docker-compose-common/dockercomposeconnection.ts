@@ -25,9 +25,9 @@ export default class DockerComposeConnection {
         this.containerConnection = containerConnection;
 
         this.dockerComposePath = tl.which("docker-compose", true);
-        this.dockerComposeFile = FileUtils.findDockerFile(tl.getInput("dockerComposeFile", true)!);
+        this.dockerComposeFile = FileUtils.findDockerFile(tl.getInput("DockerComposefile", true)!);
         if (!this.dockerComposeFile) {
-            throw new Error("No Docker Compose file matching " + tl.getInput("dockerComposeFile") + " was found.");
+            throw new Error("No Docker Compose file matching " + tl.getInput("DockerComposefile") + " was found.");
         }
         this.dockerComposeVersion = "2";
         this.additionalDockerComposeFiles = tl.getDelimitedInput("additionalDockerComposeFiles", "\n");
@@ -37,15 +37,11 @@ export default class DockerComposeConnection {
 
     public open(): Q.Promise<void> {
 
-        console.log("HALLO 1");
-
         if (this.containerConnection.hostUrl) {
             process.env["DOCKER_HOST"] = this.containerConnection.hostUrl;
             process.env["DOCKER_TLS_VERIFY"] = "1";
             process.env["DOCKER_CERT_PATH"] = this.containerConnection.certsDir;
         }
-
-        console.log("HALLO 2");
 
         tl.getDelimitedInput("dockerComposeFileArgs", "\n").forEach(envVar => {
             var tokens = envVar.split("=");
@@ -55,33 +51,29 @@ export default class DockerComposeConnection {
             process.env[tokens[0].trim()] = tokens.slice(1).join("=").trim();
         });
 
-        console.log("HALLO 3");
-
         return this.getImages(true).then(images => {
-            console.log("HALLO 6");
             var qualifyImageNames = tl.getBoolInput("qualifyImageNames");
+
             if (!qualifyImageNames) {
                 return;
             }
 
-            console.log("HALLO 7");
             var agentDirectory = tl.getVariable("Agent.HomeDirectory")!;
             this.finalComposeFile = path.join(agentDirectory, Utils.getFinalComposeFileName());
             var services: { [serviceName: string]: { image: string } } = {};
+
             if (qualifyImageNames) {
                 for (var serviceName in images) {
                     images[serviceName] = this.containerConnection.getQualifiedImageNameIfRequired(images[serviceName]);
                 }
             }
 
-            console.log("HALLO 8");
             for (var serviceName in images) {
                 services[serviceName] = {
                     image: images[serviceName]
                 };
             }
 
-            console.log("HALLO 9");
             Utils.writeFileSync(this.finalComposeFile, yaml.safeDump({
                 version: this.dockerComposeVersion,
                 services: services
@@ -113,7 +105,6 @@ export default class DockerComposeConnection {
     }
 
     public getCombinedConfig(imageDigestComposeFile?: string): any {
-        console.log("HALLO 4");
         var command = this.createComposeCommand();
         if (imageDigestComposeFile) {
             command.arg(["-f", imageDigestComposeFile]);
@@ -127,7 +118,6 @@ export default class DockerComposeConnection {
             tl.error(line);
         });
 
-        console.log("HALLO 5");
         return command.exec({ silent: true } as any).then(() => result);
     }
 
