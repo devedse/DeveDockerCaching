@@ -33,7 +33,7 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
 
 
     // get qualified image names by combining container registry(s) and repository
-    let repositoryName = tl.getInput("repository")!;
+    // let repositoryName = tl.getInput("repository")!;
     let cacheImagePostfix = tl.getInput("cacheImagePostfix")!;
     let imageNames: string[] = [];    
     // if container registry is provided, use that
@@ -52,7 +52,7 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
         throw new Error(`ImageName length should be exaclty 1, it is: ${imageNames.length}`);
     }
     
-    let imageName = imageNames[0];
+    //let imageName = imageNames[0];
 
 
 
@@ -72,31 +72,34 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
     }
     let fileData = fs.readFileSync(foundPath!, 'utf8');
 
-    console.log(`Docker file data:\n${fileData}`);
 
 
 
 
+    let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(fileData);
+    imageNamesDockerCompose = helpers.splitDockerComposeBuildLog(imageNamesDockerCompose, dockerBuildOutput);
 
-    let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(dockerComposeFileContent);
-    
-    let imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
-    let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, imageName, repositoryName, cacheImagePostfix);
+    for (let y = 0; y < imageNamesDockerCompose.length; y++) {
+        let curItem = imageNamesDockerCompose[y];
 
-    for (let i = 0; i < imageNamesToPush.length; i++) {
-        let val = imageNamesToPush[i];
+        let imageIdsToPush = helpers.findIdsInDockerBuildLog(curItem.buildLogForThisImage);
+        let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, imageName, repositoryName, cacheImagePostfix);
 
-        console.log(`Tagging ${val.stageId} as ${val.cacheImageName}...`);
+        for (let i = 0; i < imageNamesToPush.length; i++) {
+            let val = imageNamesToPush[i];
 
-        let totalOutput = "Tag:";
-        await dockerCommandUtils.command(connection, 'tag', `"${val.stageId}" "${val.cacheImageName}"`, (thisOutput) => totalOutput += `${thisOutput}\n`);
+            console.log(`Tagging ${val.stageId} as ${val.cacheImageName}...`);
 
-        console.log(`Pushing ${val.cacheImageName}...`);
+            let totalOutput = "Tag:";
+            await dockerCommandUtils.command(connection, 'tag', `"${val.stageId}" "${val.cacheImageName}"`, (thisOutput) => totalOutput += `${thisOutput}\n`);
 
-        totalOutput += "\n\nPush:\n"
-        await dockerCommandUtils.push(connection, val.cacheImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`);
-        
-        console.log("Output:");
-        console.log(totalOutput);
+            console.log(`Pushing ${val.cacheImageName}...`);
+
+            totalOutput += "\n\nPush:\n"
+            await dockerCommandUtils.push(connection, val.cacheImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`);
+            
+            console.log("Output:");
+            console.log(totalOutput);
+        }
     }
 }
