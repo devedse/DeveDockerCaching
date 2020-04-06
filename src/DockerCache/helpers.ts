@@ -147,7 +147,7 @@ export function splitDockerComposeBuildLog(dockerComposeImages: ServiceAndImage[
         let item = dockerComposeImages[i];
 
         let escapedServiceName = escapeRegExp(item.serviceName);
-        let textToSearchFor = `^Building ${escapedServiceName}[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM`;
+        let textToSearchFor = `^Building ${escapedServiceName}[\\r\\n]+^Step [0-9]+\\/[0-9]+ : FROM`;
 
         console.log(`Looking for ${textToSearchFor}`);
         const regexMatches = execRegex(dockerComposeBuildLog, textToSearchFor);
