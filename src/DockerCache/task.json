@@ -110,6 +110,7 @@
             "label": "Project Name",
             "defaultValue": "$(Build.Repository.Name)",            
             "groupName": "cachingConfiguration",
+            "visibleRule": "action = dockerComposePullCache || action = dockerComposePushCache",
             "helpMarkDown": "Project name used for default naming of images and containers."
         },
         {
@@ -118,6 +119,7 @@
             "label": "Qualify Image Names",
             "defaultValue": "true",            
             "groupName": "cachingConfiguration",
+            "visibleRule": "action = dockerComposePullCache || action = dockerComposePushCache",
             "helpMarkDown": "Qualify image names for built services with the Docker registry service connection's hostname if not otherwise specified."
         },
         {
