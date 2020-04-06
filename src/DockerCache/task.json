@@ -105,6 +105,22 @@
             "helpMarkDown": "Environment variables to be set during the command. Specify each name=value pair on a new line."
         },
         {
+            "name": "projectName",
+            "type": "string",
+            "label": "Project Name",
+            "defaultValue": "$(Build.Repository.Name)",            
+            "groupName": "cachingConfiguration",
+            "helpMarkDown": "Project name used for default naming of images and containers."
+        },
+        {
+            "name": "qualifyImageNames",
+            "type": "boolean",
+            "label": "Qualify Image Names",
+            "defaultValue": "true",            
+            "groupName": "cachingConfiguration",
+            "helpMarkDown": "Qualify image names for built services with the Docker registry service connection's hostname if not otherwise specified."
+        },
+        {
             "name": "cacheImagePostfix",
             "type": "string",
             "label": "Cache Image Postfix",
