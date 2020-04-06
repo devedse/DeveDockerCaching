@@ -1,4 +1,4 @@
-import YAML from 'yaml';
+import YAML from 'js-yaml';
 
 export function execRegex(input: string, regexString: string) : RegExpExecArray[] {
     const regex = new RegExp(regexString, 'mg');
@@ -95,7 +95,7 @@ export function countStagesInDockerFile(dockerFileContent: string): number {
 }
 
 export function findImageNamesInDockerComposeFile(dockerComposeFileContent: string): ServiceAndImage[] {
-    let parsed = YAML.parse(dockerComposeFileContent);
+    let parsed = YAML.load(dockerComposeFileContent);
     let keys = Object.keys(parsed.services);
     let entries = <any[]>Object.values(parsed.services);
 

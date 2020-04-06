@@ -8,20 +8,22 @@ import * as yaml from "js-yaml";
 import * as FileUtils from "../docker-common-v2/fileutils";
 
 import ContainerConnection from "../docker-common-v2/containerconnection"
-import AuthenticationToken from "../docker-common-v2/registryauthenticationprovider/registryauthenticationtoken"
 import * as Utils from "./utils";
 
-export default class DockerComposeConnection extends ContainerConnection {
+export default class DockerComposeConnection {
+    private containerConnection: ContainerConnection;
+
     private dockerComposePath: string;
     private dockerComposeFile: string;
     private dockerComposeVersion: string;
     private additionalDockerComposeFiles: string[];
     private requireAdditionalDockerComposeFiles: boolean;
     private projectName: string;
-    private finalComposeFile!: string;
+    public finalComposeFile!: string;
 
-    constructor() {
-        super();
+    constructor(containerConnection: ContainerConnection) {
+        this.containerConnection = containerConnection;
+
         this.dockerComposePath = tl.which("docker-compose", true);
         this.dockerComposeFile = FileUtils.findDockerFile(tl.getInput("dockerComposeFile", true)!);
         if (!this.dockerComposeFile) {
@@ -33,13 +35,11 @@ export default class DockerComposeConnection extends ContainerConnection {
         this.projectName = tl.getInput("projectName")!;
     }
 
-    public open(hostEndpoint?: string, authenticationToken?: AuthenticationToken): any {
-        super.open(hostEndpoint, authenticationToken);
-
-        if (this.hostUrl) {
-            process.env["DOCKER_HOST"] = this.hostUrl;
+    public open(): Q.Promise<void> {
+        if (this.containerConnection.hostUrl) {
+            process.env["DOCKER_HOST"] = this.containerConnection.hostUrl;
             process.env["DOCKER_TLS_VERIFY"] = "1";
-            process.env["DOCKER_CERT_PATH"] = this.certsDir;
+            process.env["DOCKER_CERT_PATH"] = this.containerConnection.certsDir;
         }
 
         tl.getDelimitedInput("dockerComposeFileArgs", "\n").forEach(envVar => {
@@ -60,7 +60,7 @@ export default class DockerComposeConnection extends ContainerConnection {
             var services: { [serviceName: string]: { image: string } } = {};
             if (qualifyImageNames) {
                 for (var serviceName in images) {
-                    images[serviceName] = this.getQualifiedImageNameIfRequired(images[serviceName]);
+                    images[serviceName] = this.containerConnection.getQualifiedImageNameIfRequired(images[serviceName]);
                 }
             }
             for (var serviceName in images) {
@@ -147,7 +147,6 @@ export default class DockerComposeConnection extends ContainerConnection {
         if (this.finalComposeFile && tl.exist(this.finalComposeFile)) {
             del.sync(this.finalComposeFile, { force: true });
         }
-        super.close();
     }
 
     private resolveAdditionalDockerComposeFilePath(dockerComposeFolderPath: string, additionalComposeFilePath: string): string {

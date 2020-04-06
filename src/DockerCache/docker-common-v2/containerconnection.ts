@@ -13,8 +13,8 @@ import * as os from "os";
 
 export default class ContainerConnection {
     private dockerPath: string;
-    protected hostUrl!: string;
-    protected certsDir!: string;
+    public hostUrl!: string;
+    public certsDir!: string;
     private caPath!: string;
     private certPath!: string;
     private keyPath!: string;

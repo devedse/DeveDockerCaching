@@ -12,13 +12,15 @@
   "dependencies": {
     "azure-pipelines-task-lib": "^2.9.3",
     "del": "^5.1.0",
+    "js-yaml": "^3.13.1",
     "yaml": "^1.8.3"
   },
   "devDependencies": {
-    "@types/yaml": "^1.2.0",
+    "@types/js-yaml": "^3.12.3",
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.9.5",
     "@types/q": "^1.5.2",
+    "@types/yaml": "^1.2.0",
     "sync-request": "^6.1.0"
   }
 }
