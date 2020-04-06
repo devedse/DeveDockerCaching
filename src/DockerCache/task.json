@@ -40,7 +40,8 @@
             "type": "string",
             "required": false,
             "helpMarkDown": "Name of the repository.",	
-            "defaultValue": "", 	
+            "defaultValue": "",
+            "visibleRule": "action = dockerPushCache || action = dockerPullCache",
             "groupName": "containerRepository",
             "properties": {	
                 "EditableOptions": "True"	
@@ -92,6 +93,8 @@
                 "rows": "2"
             },
             "label": "Additional Docker Compose Files",
+            "groupName": "cachingConfiguration",
+            "visibleRule": "action = dockerComposePullCache || action = dockerComposePushCache",
             "helpMarkDown": "Additional Docker Compose files to be combined with the primary Docker Compose file. Relative paths are resolved relative to the directory containing the primary Docker Compose file. If a specified file is not found, it is ignored. Specify each file path on a new line."
         },
         {
