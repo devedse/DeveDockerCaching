@@ -1,6 +1,8 @@
 import YAML from 'js-yaml';
 
 export function execRegex(input: string, regexString: string) : RegExpExecArray[] {
+    console.log(`Looking for ${regexString} in ${input}`);
+    
     const regex = new RegExp(regexString, 'mg');
 
     let matches: RegExpExecArray[] = [];
