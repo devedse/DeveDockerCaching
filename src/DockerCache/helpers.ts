@@ -1,8 +1,7 @@
 import YAML from 'js-yaml';
 
 export function execRegex(input: string, regexString: string) : RegExpExecArray[] {
-    console.log(`Looking for \n${regexString}\n in \n\n${input}`);
-    
+   
     const regex = new RegExp(regexString, 'mg');
 
     let matches: RegExpExecArray[] = [];
@@ -35,8 +34,11 @@ export function findDockerOutputFilePath(dockerBuildOutput: string, thingToFind:
 export function findIdsInDockerBuildLog(input: string): string[] {
     //const regex = new RegExp("(--->\\s+(?<ID>.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (?<IDLast>.*)$)", 'mg');
     //const regex = new RegExp("(?:--->\\s+(.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (.*)$)", 'mg');
+    const regex = "(?:--->\\s+(.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (.*)$)";
 
-    const regexMatches = execRegex(input, "(?:--->\\s+(.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (.*)$)");
+    console.log(`\tLooking for regex: '${regex}'`);
+    const regexMatches = execRegex(input, regex);    
+    console.log(`\tMatches found: ${regexMatches.length}`);
     
     let matches: string[] = [];
 
@@ -108,13 +110,13 @@ export function findImageNamesInDockerComposeFile(dockerComposeFileContent: stri
 
     let imageNames: ServiceAndImage[] = [];
 
+
+    console.log("Images found in docker-compose file:");
     for (let i = 0; i < entries.length; i++) {
         let entry = entries[i];
         let key = keys[i];
 
-        console.log(key);
-        console.log(entry.image);
-
+        console.log(`\tServiceName: ${key} ImageName: ${entry.image}`);
         imageNames.push({ serviceName: key, imageName: entry.image, buildLogForThisImage: "", indexInLog: undefined });
     }
 
@@ -143,7 +145,7 @@ function findNextHighestIndex(dockerComposeImages: ServiceAndImage[], index: num
 }
 
 export function splitDockerComposeBuildLog(dockerComposeImages: ServiceAndImage[], dockerComposeBuildLog: string): ServiceAndImage[] {
-    console.log();
+    console.log("Splitting dockercompose build log...");
 
     for (let i = 0; i < dockerComposeImages.length; i++) {
         let item = dockerComposeImages[i];
@@ -151,13 +153,14 @@ export function splitDockerComposeBuildLog(dockerComposeImages: ServiceAndImage[
         let escapedServiceName = escapeRegExp(item.serviceName);
         let textToSearchFor = `^Building ${escapedServiceName}[\\r\\n]+^Step [0-9]+\\/[0-9]+ : FROM`;
 
-        console.log(`Looking for ${textToSearchFor}`);
+        console.log(`\tLooking for regex: '${textToSearchFor}'`);
         const regexMatches = execRegex(dockerComposeBuildLog, textToSearchFor);
+        console.log(`\tMatches found: ${regexMatches.length}`);
 
         if (regexMatches.length > 1) {
-            console.log(`Warning, found more then 1 match for regex: ${textToSearchFor} ${regexMatches}`);
+            console.log(`\tWarning, found more then 1 match for regex: ${textToSearchFor} ${regexMatches}`);
         } else if (regexMatches.length == 0) {
-            console.log(`Error, could not find match for regex: ${textToSearchFor} in docker build log.`);
+            console.log(`\tError, could not find match for regex: ${textToSearchFor} in docker build log.`);
             continue;
         }
 
@@ -165,7 +168,7 @@ export function splitDockerComposeBuildLog(dockerComposeImages: ServiceAndImage[
         item.indexInLog = match.index;
     }
 
-    console.log();
+    console.log("Found build logs:");
 
     for (let i = 0; i < dockerComposeImages.length; i++) {
         let item = dockerComposeImages[i];
@@ -180,18 +183,15 @@ export function splitDockerComposeBuildLog(dockerComposeImages: ServiceAndImage[
             item.buildLogForThisImage = str.trim();
         }
         else {
-            console.log(`Could not find index for item: ${item.serviceName}`);
+            console.log(`\tCould not find index for item: ${item.serviceName}`);
         }
 
-        console.log(`#### ${i} #### ${item.serviceName}\n#### Index in log: ${item.indexInLog}\n#### Length in log: ${item.buildLogForThisImage?.length}\n\n`);
-
-        // console.log(item.buildLogForThisImage);
+        console.log(`\t${i}: ServiceName: ${item.serviceName} Index in log: ${item.indexInLog} Length in log: ${item.buildLogForThisImage?.length}`);
     }
     
     return dockerComposeImages;
 }
 
 export function escapeRegExp(input: string) : string {
-    //return input;
     return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
