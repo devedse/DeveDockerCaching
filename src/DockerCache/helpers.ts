@@ -47,7 +47,7 @@ export function findIdsInDockerBuildLog(input: string): string[] {
         matches.push(match[1] ?? match[2]);
     }
 
-    console.log(matches);
+    console.log(`Id's to push: ${matches}`);
 
     return matches;
 }
@@ -116,10 +116,11 @@ export function findImageNamesInDockerComposeFile(dockerComposeFileContent: stri
         let entry = entries[i];
         let key = keys[i];
 
-        console.log(`\tServiceName: ${key} ImageName: ${entry.image}`);
+        console.log(`ServiceName: ${key} ImageName: ${entry.image}`);
         imageNames.push({ serviceName: key, imageName: entry.image, buildLogForThisImage: "", indexInLog: undefined });
     }
 
+    console.log();
     return imageNames;
 }
 
@@ -153,23 +154,23 @@ export function splitDockerComposeBuildLog(dockerComposeImages: ServiceAndImage[
         let escapedServiceName = escapeRegExp(item.serviceName);
         let textToSearchFor = `^Building ${escapedServiceName}[\\r\\n]+^Step [0-9]+\\/[0-9]+ : FROM`;
 
-        console.log(`\tLooking for regex: '${textToSearchFor}'`);
+        console.log(`Looking for regex: '${textToSearchFor}'`);
         const regexMatches = execRegex(dockerComposeBuildLog, textToSearchFor);
-        console.log(`\tMatches found: ${regexMatches.length}`);
+        console.log(`Matches found: ${regexMatches.length}`);
 
         if (regexMatches.length > 1) {
-            console.log(`\tWarning, found more then 1 match for regex: ${textToSearchFor} ${regexMatches}`);
+            console.log(`Warning, found more then 1 match for regex: ${textToSearchFor} ${regexMatches}`);
         } else if (regexMatches.length == 0) {
-            console.log(`\tError, could not find match for regex: ${textToSearchFor} in docker build log.`);
+            console.log(`Error, could not find match for regex: ${textToSearchFor} in docker build log.`);
             continue;
         }
 
         let match = regexMatches[0];
         item.indexInLog = match.index;
     }
+    console.log();
 
     console.log("Found build logs:");
-
     for (let i = 0; i < dockerComposeImages.length; i++) {
         let item = dockerComposeImages[i];
 
@@ -188,7 +189,8 @@ export function splitDockerComposeBuildLog(dockerComposeImages: ServiceAndImage[
 
         console.log(`\t${i}: ServiceName: ${item.serviceName} Index in log: ${item.indexInLog} Length in log: ${item.buildLogForThisImage?.length}`);
     }
-    
+    console.log();
+
     return dockerComposeImages;
 }
 
