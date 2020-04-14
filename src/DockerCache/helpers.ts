@@ -36,9 +36,9 @@ export function findIdsInDockerBuildLog(input: string): string[] {
     //const regex = new RegExp("(?:--->\\s+(.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (.*)$)", 'mg');
     const regex = "(?:--->\\s+(.*)[\\r\\n]+^Step [0-9]+\/[0-9]+ : FROM|Successfully built (.*)$)";
 
-    console.log(`\tLooking for regex: '${regex}'`);
+    console.log(`Looking for regex: '${regex}'`);
     const regexMatches = execRegex(input, regex);    
-    console.log(`\tMatches found: ${regexMatches.length}`);
+    console.log(`Matches found: ${regexMatches.length}`);
     
     let matches: string[] = [];
 
@@ -184,10 +184,10 @@ export function splitDockerComposeBuildLog(dockerComposeImages: ServiceAndImage[
             item.buildLogForThisImage = str.trim();
         }
         else {
-            console.log(`\tCould not find index for item: ${item.serviceName}`);
+            console.log(`Could not find index for item: ${item.serviceName}`);
         }
 
-        console.log(`\t${i}: ServiceName: ${item.serviceName} Index in log: ${item.indexInLog} Length in log: ${item.buildLogForThisImage?.length}`);
+        console.log(`${i}: ServiceName: ${item.serviceName} Index in log: ${item.indexInLog} Length in log: ${item.buildLogForThisImage?.length}`);
     }
     console.log();
 
