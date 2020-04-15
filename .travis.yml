@@ -24,7 +24,7 @@ script:
   - cd DockerCache
   - npm install
   - npm run tsc
-  - mocha -r ts-node/register tests/_suite.ts
+  - npm run mocha
   - cd ..
   - tfx extension create
 
