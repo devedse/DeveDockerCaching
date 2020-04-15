@@ -14,8 +14,8 @@ matrix:
 
 install:
   - npm install -g tfx-cli
-  - npm install -g typescript
-  - npm install -g mocha
+  # - npm install -g typescript
+  # - npm install -g mocha
 
 script:
   - python3 --version
@@ -24,7 +24,7 @@ script:
   - cd DockerCache
   - npm install
   - tsc
-  - mocha tests/_suite.js
+  - mocha -r ts-node/register tests/_suite.ts
   - cd ..
   - tfx extension create
 

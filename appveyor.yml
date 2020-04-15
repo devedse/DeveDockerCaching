@@ -10,9 +10,8 @@ environment:
 before_build:
   - SET PATH="C:\Python38";%path%
   - npm install -g tfx-cli
-  - npm install -g typescript
-  - npm install -g mocha
-  # - choco install 7zip
+  # - npm install -g typescript
+  # - npm install -g mocha
 
 build_script:
   - python --version
@@ -21,7 +20,7 @@ build_script:
   - cd DockerCache
   - npm install
   - tsc
-  - mocha tests/_suite.js
+  - mocha -r ts-node/register tests/_suite.ts
   - cd ..
   - tfx extension create
 

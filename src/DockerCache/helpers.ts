@@ -116,8 +116,8 @@ export function findImageNamesInDockerComposeFile(dockerComposeFileContent: stri
         let entry = entries[i];
         let key = keys[i];
 
-        console.log(`ServiceName: ${key} ImageName: ${entry.image}`);
-        imageNames.push({ serviceName: key, imageName: entry.image, buildLogForThisImage: "", indexInLog: undefined });
+        console.log(`ServiceName: ${key} ImageName: ${entry.image} DockerFile: ${entry.build.dockerfile}`);
+        imageNames.push({ serviceName: key, imageName: entry.image, dockerFile: entry.build.dockerfile, buildLogForThisImage: "", indexInLog: undefined });
     }
 
     console.log();
@@ -127,6 +127,7 @@ export function findImageNamesInDockerComposeFile(dockerComposeFileContent: stri
 interface ServiceAndImage {
     serviceName: string;
     imageName: string;
+    dockerFile: string;
     buildLogForThisImage: string;
     indexInLog: number | undefined;
 }
