@@ -39,7 +39,8 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
         console.log();
         
         console.log("Generating final compose file...")
-        let finalComposeFile = fs.readFileSync(dockerComposeConnection.finalComposeFile, 'utf8');
+        //let finalComposeFile = fs.readFileSync(dockerComposeConnection.finalComposeFile, 'utf8');
+        let finalComposeFile = await dockerComposeConnection.getCombinedConfig();
 
         console.log(`Final compose file:\n${finalComposeFile}`);
         console.log();
