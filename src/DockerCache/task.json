@@ -18,11 +18,6 @@
             "name": "cachingConfiguration",
             "displayName": "Docker Caching Configuration",
             "isExpanded": true
-        },
-        {
-            "name": "advanced",
-            "displayName": "Advanced Options",
-            "isExpanded": false
         }
     ],
     "inputs": [
@@ -152,7 +147,7 @@
             "defaultValue": "$(System.DefaultWorkingDirectory)",
             "helpMarkDown": "Working directory for the Docker Compose command.",
             "visibleRule": "action = dockerComposePullCache || action = dockerComposePushCache",
-            "groupName": "advanced"
+            "groupName": "cachingConfiguration"
         }
     ],
     "outputVariables": [
