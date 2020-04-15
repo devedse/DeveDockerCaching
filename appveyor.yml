@@ -19,7 +19,7 @@ build_script:
   - cd src
   - cd DockerCache
   - npm install
-  - tsc
+  - npm run tsc
   - mocha -r ts-node/register tests/_suite.ts
   - cd ..
   - tfx extension create
