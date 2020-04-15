@@ -36,6 +36,43 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
         console.log();
 
         let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(finalComposeFile);
+
+        let completeDockerComposeExtension = "version: '3.4'\n\nservices:\n";
+
+        for (let y = 0; y < imageNamesDockerCompose.length; y++) {
+            var curDockerComposeEntry = imageNamesDockerCompose[y];
+            completeDockerComposeExtension += `  ${curDockerComposeEntry.serviceName}:\n  build:\n    cache_from:\n`
+
+            let dockerFileContent = fs.readFileSync(curDockerComposeEntry.dockerFile, 'utf8');
+            let stagesInDockerFile = helpers.countStagesInDockerFile(dockerFileContent);
+        
+            
+            let stagingImageName = helpers.convertToCachedImageName(curDockerComposeEntry.imageName, cacheImagePostfix);
+        
+            //let cacheArgumentDockerBuild = "";
+            let i = 0;
+            try {
+                for (i = 0; i < stagesInDockerFile; i++) {
+                    let fullImageName = `${stagingImageName}:${i}`;
+        
+                    console.log(`Pulling ${fullImageName}`);
+        
+                    let totalOutput = "Output:";
+                    await dockerCommandUtils.pull(connection, fullImageName, "", (thisOutput) => totalOutput += `${thisOutput}\n`)
+                    console.log(totalOutput);        
+        
+                    //cacheArgumentDockerBuild += `--cache-from=${fullImageName} `;
+                    completeDockerComposeExtension += `    - ${fullImageName}\n`;
+                }
+                completeDockerComposeExtension += '\n';
+            } catch (ex) {
+                console.log(`Warning, couldn't find cached container with name '${stagingImageName}:${i}. This could be because this is the first run. Exception: ${ex}`);
+            }
+            //console.log(`cacheArgumentDockerBuild: ${cacheArgumentDockerBuild}`);
+        }
+        console.log();
+        console.log("Please ensure your docker-compose files has the following cache lines to make sure caching works:");
+        console.log(completeDockerComposeExtension);
     }
     finally {
         dockerComposeConnection.close();
