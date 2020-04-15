@@ -16,6 +16,11 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
     console.log("\nStarting Docker Compose Cache Pull...");
     let cacheImagePostfix = tl.getInput("cacheImagePostfix")!;
 
+    // Change to any specified working directory
+    const cwd = tl.getInput("cwd")!;
+    console.log(`Changing directory to: ${cwd}`);
+    tl.cd(cwd);
+
     console.log();
 
     console.log("Opening Docker-Compose connection...");

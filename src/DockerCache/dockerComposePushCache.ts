@@ -17,6 +17,11 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
     let cacheImagePostfix = tl.getInput("cacheImagePostfix")!;
     let dockerBuildOutput = tl.getInput("dockerBuildOutput", true)!;
 
+    // Change to any specified working directory
+    const cwd = tl.getInput("cwd")!;
+    console.log(`Changing directory to: ${cwd}`);
+    tl.cd(cwd);
+
     console.log(`Docker build output:\n${dockerBuildOutput}\n`);
     let foundPath = helpers.findDockerOutputFilePath(dockerBuildOutput, "build");
     console.log(`Build log file to process:\n${foundPath}`);

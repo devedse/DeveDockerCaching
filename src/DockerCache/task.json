@@ -18,6 +18,11 @@
             "name": "cachingConfiguration",
             "displayName": "Docker Caching Configuration",
             "isExpanded": true
+        },
+        {
+            "name": "advanced",
+            "displayName": "Advanced Options",
+            "isExpanded": false
         }
     ],
     "inputs": [
@@ -139,6 +144,15 @@
             "visibleRule": "action = dockerPushCache || action = dockerComposePushCache",
             "groupName": "cachingConfiguration",
             "helpMarkDown": "The output variable value from the Docker build output. This can be found in the 'Output Variables' for the Docker build command."
+        },
+        {
+            "name": "cwd",
+            "type": "filePath",
+            "label": "Working Directory",
+            "defaultValue": "$(System.DefaultWorkingDirectory)",
+            "helpMarkDown": "Working directory for the Docker Compose command.",
+            "visibleRule": "action = dockerComposePullCache || action = dockerComposePushCache",
+            "groupName": "advanced"
         }
     ],
     "outputVariables": [
