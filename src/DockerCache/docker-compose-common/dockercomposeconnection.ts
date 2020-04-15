@@ -14,7 +14,7 @@ export default class DockerComposeConnection {
     private containerConnection: ContainerConnection;
 
     private dockerComposePath: string;
-    private dockerComposeFile: string;
+    public dockerComposeFile: string;
     private dockerComposeVersion: string;
     private additionalDockerComposeFiles: string[];
     private requireAdditionalDockerComposeFiles: boolean;

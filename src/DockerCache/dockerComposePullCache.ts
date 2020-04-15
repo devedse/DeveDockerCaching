@@ -29,12 +29,15 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
         await dockerComposeConnection.open();
         console.log();
         
+        const basepath = path.dirname(dockerComposeConnection.dockerComposeFile);
+        console.log(`Basepath: ${basepath}`);
         console.log("Generating final compose file...")
         //let finalComposeFile = fs.readFileSync(dockerComposeConnection.finalComposeFile, 'utf8');
         let fullFinaliComposeFile = await dockerComposeConnection.getCombinedConfig();
 
         console.log(`Final compose file:\n${fullFinaliComposeFile}`);
         console.log();
+
 
         let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(fullFinaliComposeFile);
 
@@ -44,7 +47,8 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
             var curDockerComposeEntry = imageNamesDockerCompose[y];
             completeDockerComposeExtension += `  ${curDockerComposeEntry.serviceName}:\n  build:\n    cache_from:\n`
 
-            let dockerFileContent = fs.readFileSync(curDockerComposeEntry.dockerFile, 'utf8');
+            let dockerfilepath = path.join(basepath, curDockerComposeEntry.dockerFile);
+            let dockerFileContent = fs.readFileSync(dockerfilepath, 'utf8');
             let stagesInDockerFile = helpers.countStagesInDockerFile(dockerFileContent);
         
             
