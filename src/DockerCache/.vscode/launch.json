@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
             "stopOnEntry": false,
-            "args": ["-r", "ts-node/register", "tests/**/_suite.ts", "--no-timeouts"],
+            "args": ["-r", "ts-node/register", "tests/**/*.ts", "--no-timeouts"],
             "cwd": "${workspaceRoot}",
             "runtimeExecutable": null,
             "env": { "NODE_ENV": "testing"}
