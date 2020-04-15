@@ -30,12 +30,13 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
         console.log();
         
         console.log("Generating final compose file...")
-        let finalComposeFile = fs.readFileSync(dockerComposeConnection.finalComposeFile, 'utf8');
+        //let finalComposeFile = fs.readFileSync(dockerComposeConnection.finalComposeFile, 'utf8');
+        let fullFinaliComposeFile = await dockerComposeConnection.getCombinedConfig();
 
-        console.log(`Final compose file:\n${finalComposeFile}`);
+        console.log(`Final compose file:\n${fullFinaliComposeFile}`);
         console.log();
 
-        let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(finalComposeFile);
+        let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(fullFinaliComposeFile);
 
         let completeDockerComposeExtension = "version: '3.4'\n\nservices:\n";
 
