@@ -26,11 +26,15 @@
             ],
             "properties": {
                 "name": "DockerCache",
-                "uri": "my-hub.html"
+                "uri": "hubindex.html"
             }
         }
     ],
     "files": [
+        {
+            "path": "hubindex.html",
+            "addressable": true
+        },
         {
             "path": "DockerCache"
         }
