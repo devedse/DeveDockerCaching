@@ -45,7 +45,7 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
 
         for (let y = 0; y < imageNamesDockerCompose.length; y++) {
             var curDockerComposeEntry = imageNamesDockerCompose[y];
-            completeDockerComposeExtension += `  ${curDockerComposeEntry.serviceName}:\n  build:\n    cache_from:\n`
+            completeDockerComposeExtension += `  ${curDockerComposeEntry.serviceName}:\n    build:\n      cache_from:\n`
 
             let dockerfilepath = path.join(basepath, curDockerComposeEntry.dockerFile);
             let dockerFileContent = fs.readFileSync(dockerfilepath, 'utf8');
@@ -67,7 +67,7 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
                     console.log(totalOutput);        
         
                     //cacheArgumentDockerBuild += `--cache-from=${fullImageName} `;
-                    completeDockerComposeExtension += `    - ${fullImageName}\n`;
+                    completeDockerComposeExtension += `      - ${fullImageName}\n`;
                 }
                 completeDockerComposeExtension += '\n';
             } catch (ex) {
