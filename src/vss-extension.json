@@ -29,6 +29,11 @@
             }
         }
     ],
+    "content": {
+        "details": {
+            "path": "overview.md"
+        }
+    },
     "files": [
         {
             "path": "DockerCache"
