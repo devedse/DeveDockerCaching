@@ -75,8 +75,17 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
             }
             //console.log(`cacheArgumentDockerBuild: ${cacheArgumentDockerBuild}`);
         }
+
+        let cacheComposeFile = ".docker-compose.caching.yml";
+        var agentDirectory = tl.getVariable("Agent.HomeDirectory")!;
+        let cacheComposePath = path.join(agentDirectory, cacheComposeFile);
+
+        fs.writeFileSync(cacheComposePath, completeDockerComposeExtension);
+
+        tl.setVariable("cacheArgumentDockerBuild", cacheComposePath);
+
         console.log();
-        console.log("Please ensure your docker-compose files has the following cache lines to make sure caching works:");
+        console.log(`Written compose cache file to '${cacheComposePath}, include this as an 'additional compose file' during the docker-compose build:`);
         console.log(completeDockerComposeExtension);
     }
     finally {
