@@ -76,7 +76,7 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
             //console.log(`cacheArgumentDockerBuild: ${cacheArgumentDockerBuild}`);
         }
 
-        let cacheComposeFile = ".docker-compose.caching.yml";
+        let cacheComposeFile = "docker-compose.devedockercaching.yml";
         var agentDirectory = tl.getVariable("Agent.HomeDirectory")!;
         let cacheComposePath = path.join(agentDirectory, cacheComposeFile);
 
