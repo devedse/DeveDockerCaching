@@ -37,6 +37,10 @@
     "files": [
         {
             "path": "DockerCache"
+        },
+        {
+            "path": "Images",
+            "addressable": true
         }
     ]
 }
