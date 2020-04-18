@@ -8,12 +8,15 @@ Let's say we have the following image:
 `coolregistry.azurecr.io/coolimage-staging`
 
 **1. Pull Cached Layers (will be skipped the first time)**
+
 During first build upload all layers as cache (e.g. coolregistry.azurecr.io/coolimage-staging:0 and coolregistry.azurecr.io/coolimage-staging:1)
 
 **2. docker (-compose) build**
+
 Execute the docker-compose build using the normal docker (-compose) tasks using the output from the DeveDockerCaching task
 
 **3. Push Cached Layers**
+
 After the build is completed, DeveDockerCaching will determine what layers need to be cached and push these as ....-staging:(0...n) to the container registry
 
 ## Setup in docker-compose caching
