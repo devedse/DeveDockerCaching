@@ -27,24 +27,9 @@
             "properties": {
                 "name": "DockerCache"
             }
-        },
-        {
-            "id": "my-hub",
-            "type": "ms.vss-web.hub",
-            "targets": [
-                "ms.vss-code-web.code-hub-group"
-            ],
-            "properties": {
-                "name": "My Hub",
-                "uri": "hubindex.html"
-            }
         }
     ],
     "files": [
-        {
-            "path": "hubindex.html",
-            "addressable": true
-        },
         {
             "path": "DockerCache"
         }
