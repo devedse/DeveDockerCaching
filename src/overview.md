@@ -24,6 +24,8 @@ To be able to configure this you need 3 tasks
 1. DockerCompose - build
 1. DeveDockerCaching - dockerComposePushCache
 
+![Image](Images/dockercomposeconfig.png)
+
 ### docker-compose classic pipelines
 
 ![Image](Images/dockercomposeconfig.png)
