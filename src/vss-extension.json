@@ -25,7 +25,17 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "DockerCache",
+                "name": "DockerCache"
+            }
+        },
+        {
+            "id": "my-hub",
+            "type": "ms.vss-web.hub",
+            "targets": [
+                "ms.vss-code-web.code-hub-group"
+            ],
+            "properties": {
+                "name": "My Hub",
                 "uri": "hubindex.html"
             }
         }
