@@ -31,4 +31,24 @@ To be able to configure this you need 3 tasks
 
 ### docker-compose classic pipelines
 
+**DeveDockerCaching - dockerComposePullCache**
+
+1. Make sure the variables are configured exactly the same as the docker-compose build task.
+1. Make sure the output is stored in a variable which should be provided to the docker-compose build task in the "additional docker compose files".
+
+![Image](Images/devedockercache_dockercomposepullconfig.png)
+
+**DockerCompose - build**
+
+1. Make sure the additional docker-compose tasks includes the output from the DeveDockerCompose pull task.
+1. DeveDockerCaching generates a compose file that should be included in the addtional docker-compose files.
+1. Set the output variable of the docker-compose build task to something. DeveDockerCaching needs this to determine what docker images where made.
+
 ![Image](Images/dockercomposeconfig.png)
+
+**DeveDockerCaching - dockerComposePushCache**
+
+1. Make sure the variables are configured exactly the same as the docker-compose build task.
+1. Then configure this variable as the docker build output.
+
+![Image](Images/devedockercache_dockercomposepushconfig.png)
