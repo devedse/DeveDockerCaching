@@ -29,14 +29,21 @@ To be able to configure this you need 3 tasks
 
 ![Image](Images/dockercompose_tasks.png)
 
-### docker-compose classic pipelines
-
 **DeveDockerCaching - dockerComposePullCache**
 
 1. Make sure the variables are configured exactly the same as the docker-compose build task.
 1. Make sure the output is stored in a variable which should be provided to the docker-compose build task in the "additional docker compose files".
 
 ![Image](Images/devedockercache_dockercomposepullconfig.png)
+
+```
+- task: Devedse.DeveDockerCaching.DockerCache-task.DeveDockerCaching@1
+  name: 'deveDockerCaching'
+  displayName: 'Docker Cache - dockerComposePullCache'
+  inputs:
+    action: dockerComposePullCache
+    containerRegistry: coolregistry
+```
 
 **DockerCompose - build**
 
@@ -45,6 +52,18 @@ To be able to configure this you need 3 tasks
 
 ![Image](Images/dockercomposeconfig.png)
 
+```
+- task: Devedse.DeveDockerComposeV0.DockerComposeV0-task.DevedseDockerCompose@1
+  name: 'dockerCompose'
+  displayName: 'DockerCompose - Build services'
+  inputs:
+    azureSubscription: 'Microsoft Azure Enterprise (/**************/)'
+    azureContainerRegistry: '{"loginServer":"coolregistry.azurecr.io", "id" : "/subscriptions/**************/resourceGroups/coolregistryresources/providers/Microsoft.ContainerRegistry/registries/coolregistry"}'
+    additionalDockerComposeFiles: '$(deveDockerCaching.cacheArgumentDockerBuild)'
+    action: 'Build services'
+    additionalImageTags: '$(Build.BuildId)'
+```
+
 **DeveDockerCaching - dockerComposePushCache**
 
 1. Make sure the variables are configured exactly the same as the docker-compose build task.
@@ -52,6 +71,15 @@ To be able to configure this you need 3 tasks
 
 ![Image](Images/devedockercache_dockercomposepushconfig.png)
 
+
+```
+- task: Devedse.DeveDockerCaching.DockerCache-task.DeveDockerCaching@1
+  displayName: 'Docker Cache - dockerComposePushCache'
+  inputs:
+    action: dockerComposePushCache
+    containerRegistry: coolregistry
+    dockerBuildOutput: '$(dockerCompose.DockerComposeOutput)'
+```
 
 ## Setup caching with docker
 
@@ -64,14 +92,22 @@ To be able to configure this you need 4 tasks (docker build and docker push shou
 
 ![Image](Images/docker_tasks.png)
 
-### docker classic pipelines
-
 **DeveDockerCaching - dockerPullCache**
 
 1. Make sure the variables are configured exactly the same as the docker build task.
 1. Make sure the output is stored in a variable which should be provided to the docker build task in the "arguments".
 
 ![Image](Images/devedockercache_dockerpullconfig.png)
+
+```
+- task: DeveDockerCaching@1
+  name: deveDockerCaching
+  inputs:
+    action: 'dockerPullCache'
+    containerRegistry: 'coolregistry'
+    repository: 'coolcontainer'
+    Dockerfile: '**/Dockerfile'
+```
 
 **Docker - build**
 
@@ -80,9 +116,31 @@ To be able to configure this you need 4 tasks (docker build and docker push shou
 
 ![Image](Images/dockerconfig.png)
 
+```
+- task: Docker@2
+  name: dockerBuildCommand
+  displayName: 'Docker - Build'
+  inputs:
+    containerRegistry: 'coolregistry'
+    repository: 'coolcontainer'
+    command: 'build'
+    Dockerfile: 'src/DocumentMining/DocumentMining.API/Dockerfile'
+    buildContext: 'src/DocumentMining'
+    arguments: '$(deveDockerCaching.cacheArgumentDockerBuild)'
+```
+
 **Docker - push**
 
 1. This task does not need changes
+
+```
+- task: Docker@2
+  displayName: 'Docker - Push'
+  inputs:
+    containerRegistry: coolregistry
+    repository: coolcontainer
+    command: push
+```
 
 **DeveDockerCaching - dockerPushCache**
 
@@ -90,3 +148,13 @@ To be able to configure this you need 4 tasks (docker build and docker push shou
 1. Set the `Docker build output` variable to the output variable from the `Docker - build` task.
 
 ![Image](Images/devedockercache_dockerpushconfig.png)
+
+```
+- task: DeveDockerCaching@1
+  inputs:
+    action: 'dockerPushCache'
+    containerRegistry: 'coolregistry'
+    repository: 'coolcontainer'
+    Dockerfile: '**/Dockerfile'
+    dockerBuildOutput: '$(dockerBuildCommand.DockerOutput)'
+```
