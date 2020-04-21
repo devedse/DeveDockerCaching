@@ -124,8 +124,8 @@ To be able to configure this you need 4 tasks (docker build and docker push shou
     containerRegistry: 'coolregistry'
     repository: 'coolcontainer'
     command: 'build'
-    Dockerfile: 'src/DocumentMining/DocumentMining.API/Dockerfile'
-    buildContext: 'src/DocumentMining'
+    Dockerfile: '**/Dockerfile'
+    buildContext: 'src'
     arguments: '$(deveDockerCaching.cacheArgumentDockerBuild)'
 ```
 
