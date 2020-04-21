@@ -37,7 +37,7 @@ To be able to configure this you need 3 tasks
 ![Image](Images/devedockercache_dockercomposepullconfig.png)
 
 ```
-- task: Devedse.DeveDockerCaching.DockerCache-task.DeveDockerCaching@1
+- task: DeveDockerCaching@1
   name: 'deveDockerCaching'
   displayName: 'Docker Cache - dockerComposePullCache'
   inputs:
@@ -53,7 +53,7 @@ To be able to configure this you need 3 tasks
 ![Image](Images/dockercomposeconfig.png)
 
 ```
-- task: Devedse.DeveDockerComposeV0.DockerComposeV0-task.DevedseDockerCompose@1
+- task: DevedseDockerCompose@1
   name: 'dockerCompose'
   displayName: 'DockerCompose - Build services'
   inputs:
@@ -73,7 +73,7 @@ To be able to configure this you need 3 tasks
 
 
 ```
-- task: Devedse.DeveDockerCaching.DockerCache-task.DeveDockerCaching@1
+- task: DeveDockerCaching@1
   displayName: 'Docker Cache - dockerComposePushCache'
   inputs:
     action: dockerComposePushCache
