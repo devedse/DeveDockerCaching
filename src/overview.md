@@ -41,8 +41,9 @@ To be able to configure this you need 3 tasks
   name: 'deveDockerCaching'
   displayName: 'Docker Cache - dockerComposePullCache'
   inputs:
-    action: dockerComposePullCache
-    containerRegistry: coolregistry
+    action: 'dockerComposePullCache'
+    containerRegistry: 'coolregistry'
+    DockerComposefile: '**/docker-compose.yml'
 ```
 
 **DockerCompose - build**
@@ -57,8 +58,10 @@ To be able to configure this you need 3 tasks
   name: 'dockerCompose'
   displayName: 'DockerCompose - Build services'
   inputs:
-    azureSubscription: 'Microsoft Azure Enterprise (/**************/)'
-    azureContainerRegistry: '{"loginServer":"coolregistry.azurecr.io", "id" : "/subscriptions/**************/resourceGroups/coolregistryresources/providers/Microsoft.ContainerRegistry/registries/coolregistry"}'
+    containerregistrytype: 'Azure Container Registry'
+    azureSubscription: 'Cool Subscription'
+    azureContainerRegistry: '{"loginServer":"coolrepository.azurecr.io", "id" : "/subscriptions/***************/resourceGroups/CoolResources/providers/Microsoft.ContainerRegistry/registries/coolregistry"}'
+    dockerComposeFile: '**/docker-compose.yml'
     additionalDockerComposeFiles: '$(deveDockerCaching.cacheArgumentDockerBuild)'
     action: 'Build services'
     additionalImageTags: '$(Build.BuildId)'
@@ -76,8 +79,9 @@ To be able to configure this you need 3 tasks
 - task: DeveDockerCaching@1
   displayName: 'Docker Cache - dockerComposePushCache'
   inputs:
-    action: dockerComposePushCache
-    containerRegistry: coolregistry
+    action: 'dockerComposePushCache'
+    containerRegistry: 'coolregistry'
+    DockerComposefile: '**/docker-compose.yml'
     dockerBuildOutput: '$(dockerCompose.DockerComposeOutput)'
 ```
 
