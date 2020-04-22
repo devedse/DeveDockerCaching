@@ -124,4 +124,21 @@ describe('Sample task tests', function () {
 
         done();
     });
+
+    it('Determines the right dockerfile path', function(done: MochaDone) {
+        assert.equal(helpers.determineDockerfilePath("/dir", ".", "dockerfile").replace(/\\/g, "/"), "/dir/dockerfile");
+        assert.equal(helpers.determineDockerfilePath("/dir", "/home", "dockerfile").replace(/\\/g, "/"), "/home/dockerfile");
+        assert.equal(helpers.determineDockerfilePath("/dir", "home", "dockerfile").replace(/\\/g, "/"), "/dir/home/dockerfile");
+        assert.equal(helpers.determineDockerfilePath("/dir/test", "../thing", "dockerfile").replace(/\\/g, "/"), "/dir/thing/dockerfile");
+        assert.equal(helpers.determineDockerfilePath("/dir/test", "./thing", "dockerfile").replace(/\\/g, "/"), "/dir/test/thing/dockerfile");
+        assert.equal(helpers.determineDockerfilePath("/dir/test", "thing", "dockerfile").replace(/\\/g, "/"), "/dir/test/thing/dockerfile");
+        assert.equal(helpers.determineDockerfilePath("/dir/test", "thing", "../dockerfile").replace(/\\/g, "/"), "/dir/test/dockerfile");
+        assert.equal(helpers.determineDockerfilePath("/dir/test", "thing", "subdir/dockerfile").replace(/\\/g, "/"), "/dir/test/thing/subdir/dockerfile");
+        assert.equal(helpers.determineDockerfilePath("/dir/test", "/home", "subdir/dockerfile").replace(/\\/g, "/"), "/home/subdir/dockerfile");
+        assert.equal(helpers.determineDockerfilePath("/dir/test", "/home/", "subdir/dockerfile").replace(/\\/g, "/"), "/home/subdir/dockerfile");
+        assert.equal(helpers.determineDockerfilePath("/dir", "C:\\", "dockerfile").replace(/\\/g, "/"), "C:/dockerfile");
+        assert.equal(helpers.determineDockerfilePath("/dir", "C:\\test", "dockerfile").replace(/\\/g, "/"), "C:/test/dockerfile");
+
+        done();
+    });
 });

@@ -1,4 +1,5 @@
 import YAML from 'js-yaml';
+import * as path from 'path';
 
 export function execRegex(input: string, regexString: string) : RegExpExecArray[] {
    
@@ -215,4 +216,12 @@ export function escapeRegExp(input: string) : string {
 
 export function getDirectoryName(path: string) : string {
     return path.substring(0, Math.max(path.lastIndexOf("/"), path.lastIndexOf("\\")));
+}
+
+export function determineDockerfilePath(basepath: string, context: string, dockerfile: string): string {
+    if (path.isAbsolute(context)) {
+        return path.join(context, dockerfile);
+    } else {
+        return path.join(basepath, context, dockerfile);
+    }
 }
