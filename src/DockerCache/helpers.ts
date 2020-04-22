@@ -119,15 +119,18 @@ export function findImageNamesInDockerComposeFile(dockerComposeFileContent: stri
     console.log("Images found in docker-compose file:");
     for (let i = 0; i < entries.length; i++) {
         let entry = entries[i];
-        let key = keys[i];
 
-        let context = "";
-        if (entry.context) {
-            context = entry.context;
+        if (entry.build) {
+            let key = keys[i];
+
+            let context = "";
+            if (entry.build.context) {
+                context = entry.build.context;
+            }
+
+            console.log(`ServiceName: ${key} ImageName: ${entry.image} DockerFile: ${entry.build.dockerfile}`);
+            imageNames.push({ serviceName: key, imageName: entry.image, dockerFile: entry.build.dockerfile, context: context, buildLogForThisImage: "", indexInLog: undefined });
         }
-
-        console.log(`ServiceName: ${key} ImageName: ${entry.image} DockerFile: ${entry.build.dockerfile}`);
-        imageNames.push({ serviceName: key, imageName: entry.image, dockerFile: entry.build.dockerfile, context: context, buildLogForThisImage: "", indexInLog: undefined });
     }
 
     console.log();

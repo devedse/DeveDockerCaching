@@ -52,7 +52,7 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
             let thisImageDockerComposeExtension = "    build:\n      cache_from:\n";
 
             let dockerfilepath = path.join(basepath, curDockerComposeEntry.context, curDockerComposeEntry.dockerFile);
-            console.log(`Docker file location: ${dockerfilepath}`);
+            console.log(`BasePath: ${basepath}, Context: ${curDockerComposeEntry.context}, Dockerfile: ${curDockerComposeEntry.dockerFile}, Resolved dockerfile location: ${dockerfilepath}`);
             let dockerFileContent = fs.readFileSync(dockerfilepath, 'utf8');
             let stagesInDockerFile = helpers.countStagesInDockerFile(dockerFileContent);
         

@@ -80,15 +80,19 @@ describe('Sample task tests', function () {
         assert.equal(imageNamesDockerCompose[0].serviceName, 'coolimage.service');
         assert.equal(imageNamesDockerCompose[0].imageName, '${DOCKER_REGISTRY-}coolimageservice');
         assert.equal(imageNamesDockerCompose[0].dockerFile, 'coolimage.Service/Dockerfile');
+        assert.equal(imageNamesDockerCompose[0].context, '.');
         assert.equal(imageNamesDockerCompose[1].serviceName, 'coolimage.service.cdcprocessor');
         assert.equal(imageNamesDockerCompose[1].imageName, '${DOCKER_REGISTRY-}coolimageservicecdcprocessor');
         assert.equal(imageNamesDockerCompose[1].dockerFile, 'coolimage.Service.CDCProcessor/Dockerfile');
+        assert.equal(imageNamesDockerCompose[1].context, '.');
         assert.equal(imageNamesDockerCompose[2].serviceName, 'coolimage.service.eventpublisher');
         assert.equal(imageNamesDockerCompose[2].imageName, '${DOCKER_REGISTRY-}coolimageserviceeventpublisher');
         assert.equal(imageNamesDockerCompose[2].dockerFile, 'coolimage.Service.EventPublisher/Dockerfile');
+        assert.equal(imageNamesDockerCompose[2].context, '.');
         assert.equal(imageNamesDockerCompose[3].serviceName, 'coolimage.service.eventconsumer');
         assert.equal(imageNamesDockerCompose[3].imageName, '${DOCKER_REGISTRY-}coolimageserviceeventconsumer');
         assert.equal(imageNamesDockerCompose[3].dockerFile, 'coolimage.Service.EventConsumer/Dockerfile');
+        assert.equal(imageNamesDockerCompose[3].context, '.');
 
         done();
     });
