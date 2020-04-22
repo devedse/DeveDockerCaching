@@ -103,6 +103,11 @@ export function countStagesInDockerFile(dockerFileContent: string): number {
     return count;
 }
 
+export function readVersionFromDockerComposeFile(dockerComposeFileContent: string): string {
+    let parsed = YAML.load(dockerComposeFileContent);
+    return parsed.version;
+}
+
 export function findImageNamesInDockerComposeFile(dockerComposeFileContent: string): ServiceAndImage[] {
     let parsed = YAML.load(dockerComposeFileContent);
     let keys = Object.keys(parsed.services);

@@ -40,8 +40,9 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
 
 
         let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(finalComposeFile);
+        let versionInDockerComposeFile = helpers.readVersionFromDockerComposeFile(finalComposeFile);
 
-        let completeDockerComposeExtension = "version: '3.4'\n\nservices:\n";
+        let completeDockerComposeExtension = `version: '${versionInDockerComposeFile}'\n\nservices:\n`;
 
         for (let y = 0; y < imageNamesDockerCompose.length; y++) {
             var curDockerComposeEntry = imageNamesDockerCompose[y];

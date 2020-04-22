@@ -35,7 +35,7 @@ describe('Sample task tests', function () {
     });
 
     it('Finds the right file in dockerBuildOutput', function(done: MochaDone) {
-        let foundPath = helpers.findDockerOutputFilePath('src/build_123.txt\nsrc/push_123.txt', 'build');
+        const foundPath = helpers.findDockerOutputFilePath('src/build_123.txt\nsrc/push_123.txt', 'build');
         
         console.log(`Found path: ${foundPath}`);
 
@@ -45,9 +45,9 @@ describe('Sample task tests', function () {
     });
 
     it('Finds the right file in dockerBuildOutput', function(done: MochaDone) {
-        let fileData = fs.readFileSync('./tests/dockerBuildLogExample.txt', 'utf8');
+        const fileData = fs.readFileSync('./tests/dockerBuildLogExample.txt', 'utf8');
 
-        let imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
+        const imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
         
         console.log(`Found matches: ${imageIdsToPush}`);
 
@@ -55,10 +55,10 @@ describe('Sample task tests', function () {
     });
 
     it('Generates the right image names', function(done: MochaDone) {
-        let fileData = fs.readFileSync('./tests/dockerBuildLogExample.txt', 'utf8');
+        const fileData = fs.readFileSync('./tests/dockerBuildLogExample.txt', 'utf8');
 
-        let imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
-        let imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, 'testRepo.azurecr.io/superimage', '-staging');
+        const imageIdsToPush = helpers.findIdsInDockerBuildLog(fileData);
+        const imageNamesToPush = helpers.determineFullyQualifiedDockerNamesForTags(imageIdsToPush, 'testRepo.azurecr.io/superimage', '-staging');
 
         console.log(`Found matches: ${imageIdsToPush}`);
         console.log(`Found image names to push:`);
@@ -71,9 +71,9 @@ describe('Sample task tests', function () {
     });
 
     it('Parses image names from docker-compose.yml', function(done: MochaDone) {
-        let fileData = fs.readFileSync('./tests/docker-composeExample.txt', 'utf8');
+        const fileData = fs.readFileSync('./tests/docker-composeExample.txt', 'utf8');
 
-        let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(fileData);
+        const imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(fileData);
 
         console.log(`Found images in docker compose file: ${imageNamesDockerCompose}`);
         
@@ -94,10 +94,10 @@ describe('Sample task tests', function () {
     });
 
     it('Splits the docker compose output log', function(done: MochaDone) {
-        let fileData = fs.readFileSync('./tests/docker-composeExample.txt', 'utf8');
-        let dockerComposeBuildLog = fs.readFileSync('./tests/dockerComposeBuildLogExample.txt', 'utf8');
+        const fileData = fs.readFileSync('./tests/docker-composeExample.txt', 'utf8');
+        const dockerComposeBuildLog = fs.readFileSync('./tests/dockerComposeBuildLogExample.txt', 'utf8');
 
-        let imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(fileData);
+        const imageNamesDockerCompose = helpers.findImageNamesInDockerComposeFile(fileData);
         helpers.splitDockerComposeBuildLog(imageNamesDockerCompose, dockerComposeBuildLog);
 
         assert.ok(imageNamesDockerCompose[0].buildLogForThisImage.startsWith("Building coolimage.service"), 'StartsWith failed for 0');
@@ -108,6 +108,15 @@ describe('Sample task tests', function () {
         assert.ok(imageNamesDockerCompose[1].buildLogForThisImage.endsWith("Successfully tagged containerregistry.azurecr.io/coolimageservicecdcprocessor:latest"), 'EndsWith failed for 1');
         assert.ok(imageNamesDockerCompose[2].buildLogForThisImage.endsWith("[section]Finishing: Build services"), 'EndsWith failed for 2');
         assert.ok(imageNamesDockerCompose[3].buildLogForThisImage.endsWith("Successfully tagged containerregistry.azurecr.io/coolimageserviceeventconsumer:latest"), 'EndsWith failed for 0');
+
+        done();
+    });
+
+    it('Obtains the right version from a docker compose file', function(done: MochaDone) {
+        const fileData = fs.readFileSync('./tests/docker-composeExample.txt', 'utf8');
+        const readVersion = helpers.readVersionFromDockerComposeFile(fileData);
+
+        assert.equal(readVersion, "3.4");
 
         done();
     });
