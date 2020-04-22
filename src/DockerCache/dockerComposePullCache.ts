@@ -45,7 +45,10 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
 
         for (let y = 0; y < imageNamesDockerCompose.length; y++) {
             var curDockerComposeEntry = imageNamesDockerCompose[y];
-            let thisImageDockerComposeExtension = `  ${curDockerComposeEntry.serviceName}:\n    build:\n      cache_from:\n`
+
+            //Apparently it's allowed to have an empty service (e.g. coolimage:) but not one of the childs should be empty. So we add this to the file already, and the images ones they have all been downloaded.
+            completeDockerComposeExtension += `  ${curDockerComposeEntry.serviceName}:\n`;
+            let thisImageDockerComposeExtension = "    build:\n      cache_from:\n";
 
             let dockerfilepath = path.join(basepath, curDockerComposeEntry.dockerFile);
             let dockerFileContent = fs.readFileSync(dockerfilepath, 'utf8');
@@ -69,14 +72,15 @@ export async function run(connection: ContainerConnection, outputUpdate: (data: 
                     //cacheArgumentDockerBuild += `--cache-from=${fullImageName} `;
                     thisImageDockerComposeExtension += `      - ${fullImageName}\n`;
                 }
-                thisImageDockerComposeExtension += '\n';
+                
 
                 //Only apply this if everything succeeded
                 completeDockerComposeExtension += thisImageDockerComposeExtension;
             } catch (ex) {
                 console.log(`Warning, couldn't find cached container with name '${stagingImageName}:${i}. This could be because this is the first run. Exception: ${ex}`);
             }
-            //console.log(`cacheArgumentDockerBuild: ${cacheArgumentDockerBuild}`);
+
+            completeDockerComposeExtension += '\n';
         }
 
         let cacheComposeFile = "docker-compose.devedockercaching.yml";
