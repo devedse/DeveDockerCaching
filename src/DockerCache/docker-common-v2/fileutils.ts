@@ -14,32 +14,32 @@ export function writeFileSync(filePath: string, data: string): number {
         const fd = fs.openSync(filePath, 'w');
         var bitesWritten = fs.writeSync(fd, data);
         fs.fsyncSync(fd);
-        tl.debug(tl.loc("FileContentSynced", data));
+        tl.debug(`Synced the file content to the disk. The content is ${data}`);
         fs.closeSync(fd);
         return bitesWritten;
     } catch(e)
     {
-        tl.error(tl.loc('CantWriteDataToFile', filePath, e));
+        tl.error(`Can not write data to the file ${filePath}. Error: ${e}`);
         throw e;
     }
 }
 
 export function findDockerFile(dockerfilepath: string) : string {
     if (dockerfilepath.indexOf('*') >= 0 || dockerfilepath.indexOf('?') >= 0) {
-        tl.debug(tl.loc('ContainerPatternFound'));
+        tl.debug("Pattern found in docker compose filepath parameter");
         let workingDirectory = tl.getVariable('System.DefaultWorkingDirectory');
         let allFiles = tl.find(workingDirectory!);
         let matchingResultsFiles = tl.match(allFiles, dockerfilepath, workingDirectory, { matchBase: true });
 
         if (!matchingResultsFiles || matchingResultsFiles.length == 0) {
-            throw new Error(tl.loc('ContainerDockerFileNotFound', dockerfilepath));
+            throw new Error(`No Docker file matching '${dockerfilepath}' was found.`);
         }
 
         return matchingResultsFiles[0];
     }
     else
     {
-        tl.debug(tl.loc('ContainerPatternNotFound'));
+        tl.debug("No pattern found in docker compose filepath parameter");
         return dockerfilepath;
     }
 }

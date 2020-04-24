@@ -163,7 +163,7 @@ export default class DockerComposeConnection {
 
         if(!tl.exist(additionalComposeFilePath))
         {
-            tl.warning(tl.loc('AdditionalDockerComposeFileDoesNotExists', additionalComposeFilePath));
+            tl.warning(`Additional Docker Compose File ${additionalComposeFilePath} does not exists.`);
         }
 
         return additionalComposeFilePath;

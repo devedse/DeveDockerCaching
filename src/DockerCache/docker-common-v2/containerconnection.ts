@@ -42,7 +42,7 @@ export default class ContainerConnection {
         let errlines = Array<string>();
         let dockerHostVar = tl.getVariable("DOCKER_HOST");
         if (dockerHostVar) {
-            tl.debug(tl.loc('ConnectingToDockerHost', dockerHostVar));
+            tl.debug(`DOCKER_HOST variable is set. Docker will try to connect to the Docker host: ${dockerHostVar}`);
         }
 
         command.on("errline", line => {
@@ -50,7 +50,7 @@ export default class ContainerConnection {
         });
         return command.exec(options).fail(error => {            
             if (dockerHostVar) {
-                tl.warning(tl.loc('DockerHostVariableWarning', dockerHostVar));
+                tl.warning(`DOCKER_HOST variable is set. Please ensure that the Docker daemon is running on: ${dockerHostVar}`);
             }
 
             errlines.forEach(line => tl.error(line));
@@ -322,10 +322,10 @@ export default class ContainerConnection {
             configurationFilePath = path.join(this.configurationDirPath, "config.json");    
         }
     
-        tl.debug(tl.loc('WritingDockerConfigToTempFile', configurationFilePath, dockerConfigContent));
+        tl.debug(`Writing Docker config to temp file. File path: ${configurationFilePath}, Docker config: ${dockerConfigContent}`);
         if(fileutils.writeFileSync(configurationFilePath, dockerConfigContent) == 0) {
-            tl.error(tl.loc('NoDataWrittenOnFile', configurationFilePath));
-            throw new Error(tl.loc('NoDataWrittenOnFile', configurationFilePath));
+            tl.error(`No data was written into the file ${configurationFilePath}`);
+            throw new Error(`No data was written into the file ${configurationFilePath}`);
         }
     }
 
